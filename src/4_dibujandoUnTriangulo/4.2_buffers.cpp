@@ -2,20 +2,39 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
-//GLSL luce muys similar a C
+//GLSL luce muy similar a C
 const char *vertexShaderSource = 
-    //Cada shader empiza con la declaración de su versión
+    //Cada shader empieza con la declaración de su versión y el perfil que vamos a utilizar
     "#version 330 core\n"
-    //Declaramos los atributos del vertice de entrada en el vertex shader con la palabra clave in.
+    //Declaramos los atributos de entrada del vertice en el vertex shader con la palabra clave 'in'.
     //Por ahora, solo nos interesan los datos de posicion, asi que solo necesitamos un atributo de vertice.
     //Debido a que cada vertice son coordenadas 3D, creamos una variable de entrada vec3 con el nombre aPos.
-    //Tambien especificamos la ubicacion de la variable de entrada a través de layout.
+    //Tambien especificamos la ubicacion de la variable de entrada a través de layout, luego veremos poruqe necesitamos esa ubicacion.
+
+    //En GLSL, los vectores tienen un tamano maximo de 4, vec.x, vec.y, vec.z y vec.w (division de perspectiva).
     "layout (location = 0) in vec3 aPos;\n"
     "void main()\n"
     "{\n"
-        //
+        //Para configurar la salida del 'vertex shader', debemos asignar los datos de posicion a la variable predefinida gl_Position
+        //el cual es un vec 4 detras de escenas.
+        //al final de la funcion 'main', cual sea el valor del gl_Position sera utilizado como salida del 'vertex shader'.
+
+        //Debido a que nuestra etrada es solamente un 'vec3', debemos castearlo a 'vec4', Lo hacemos ingresando los valores del vec3 individualmente,
+        //y asignando el componente 'w' a 1.0f.
     "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
     "}\0";
+
+    //Los colores son representados como un vector de 4 valores: rojo, verde, azul y alpha (opacidad), comunmente abreviados como RGBA.
+const char *fragmentShaderSource = 
+    "#version 330 core\n"
+    //El 'fragment shader' solamente requiere de una variable de salida, y la cual es un vector de tamano de 4. 
+    //Podemos declarar la variable de salida con la palabra clave 'out' y la cual llamaremos 'FragColor'
+    "out vec4 FragColor;\n"
+    "void main()\n"
+    "{\n"
+        //Luego, debemos simplemente asignar los calores de color al vector en cuestion.
+    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    "}";
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -57,7 +76,6 @@ int main(int argc, char *argv[]){
 
     glfwSwapInterval(1);
 
-    //Para dibujar un triangulo, configuramos las coordenadas de los vértices en formato NDC
     float vertices[]={
         //X     //Y     //Z
         0.0f,   0.5f,   0.0f,
@@ -94,12 +112,7 @@ int main(int argc, char *argv[]){
         GL_STATIC_DRAW
     );
 
-    //Ahora, queremos crear los vertex y fragment shaders para procesar los datos
-
-    //Vertex Shader
-    //OpenGL moderno requiere que construyamos un vertex y fragment shader si queremos hacer algun tipo de renderizado.
-    //LO primero que necesitamos hacer es escribir el vertex shader en el lengueje de GLSL y copilarlo para utiliarlo en nuestra aplicación.
-
+    /*Mas contenido en el codigo con etiqueta 4.3*/
 
     // Ciclo de renderizado
     while(!glfwWindowShouldClose(window)){
