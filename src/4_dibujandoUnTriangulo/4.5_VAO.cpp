@@ -26,8 +26,11 @@ void processInput(GLFWwindow *window);
 int main(int argc, char *argv[]){
 
     glfwInit();
+
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
@@ -35,7 +38,9 @@ int main(int argc, char *argv[]){
     if (window == NULL){
 
         std::cout << "Failed to create GLFW window" << std::endl;
+
         glfwTerminate();
+
         return -1;
     }
 
@@ -47,20 +52,26 @@ int main(int argc, char *argv[]){
 
         return -1;
     }  
-    glViewport(0, 0, 800, 600);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSwapInterval(1);
 
+    glViewport(0, 0, 800, 600);
+
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+    glfwSwapInterval(1);
     float vertices[]={
         //X     //Y     //Z
         0.0f,   0.5f,   0.0f,
         -0.5f,  -0.5f,  0.0f,
         0.5f,   -0.5f,  0.0f
     };
-
-    unsigned int VBO, VAO;
-
-    glGenVertexArrays(1, &VAO);
+    unsigned int 
+        VBO, 
+        VAO;    //En la version core de OpenGL es OBLIGATORIO usar un VAO, para poder saber lo que necesita hacer con las entradas de los vertices. Si fallamos en enlazar un VAO, OpenGL fallara en dibujar algo.
+                //Un VAO almacena lo siguiente:
+                //- Llamadas a glEnableVertexAttribute o Disable
+                //- Configuraciones vie glVertexAttribPointer
+                //- VBOs asociados con los atributos de los vertices a traves de llamas al glVertexAttribPointer
+    glGenVertexArrays(1, &VAO);// Genera un nuevo VAO
     glGenBuffers(1, &VBO);
     glBindVertexArray(VAO);
 
@@ -70,16 +81,20 @@ int main(int argc, char *argv[]){
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
+    //Desenlaza el VBO, ya no mas siendo el actual
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    //Desenlaza el VAO
     glBindVertexArray(0);
-    
+
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+
     glCompileShader(vertexShader);
     int success;
     char infoLog[512];
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+
     if(!success)
     {
         glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
@@ -88,20 +103,26 @@ int main(int argc, char *argv[]){
 
     unsigned int fragmentShader;
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+
     glCompileShader(fragmentShader);
+
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+
     if(!success)
     {
         glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     }
-
     unsigned int shaderProgram;
     shaderProgram = glCreateProgram();
+
     glAttachShader(shaderProgram, vertexShader);
     glAttachShader(shaderProgram, fragmentShader);
+
     glLinkProgram(shaderProgram);
+
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
     if(!success){
         glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
@@ -128,13 +149,9 @@ int main(int argc, char *argv[]){
 
         //verifica y llama los eventos e intercambia los buffers
         glfwSwapBuffers(window);
+
         glfwPollEvents();
     }
-
-    //Opcional: Desasingar todos los recursos una vez que han cumplido sus propositos
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteProgram(shaderProgram);
 
     glfwTerminate();
     return 0;

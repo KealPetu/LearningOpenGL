@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+//Este codigo solo es de expliacion, no existiran cambios visibles en la ventana si se ejecuta.
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 void processInput(GLFWwindow *window);
@@ -53,6 +54,7 @@ int main(int argc, char *argv[]){
     //La ventaja de estos buffers, es que nos permiten grandes cantidades de datos a la GPU, y mantenerlos ahi si existe suficiente memoria, sin tener que enviar datos de los vertices individualmente.
     //Una vez los datos están en la GPU, el vertex shader tiene  acceso casi instantaneo  a los vértices, haciendolo extremadamente rápido.
     unsigned int VBO;
+    glGenBuffers(1, &VBO); //Generamos un buffer para los vertices
 
     //OpenGL tiene muchos tipos de buffers, y el tipo de buffer del VBO es GL_ARRAY_BUFFER. OpenGL nos permite enlazar varios buffers a la vez, en tanto tengamos diferentes tipos de buffers.
     //Podemos enlazar el buffer creado con la funcion glBindBuffer

@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+//Este codigo solo es de expliacion, no existiran cambios visibles en la ventana si se ejecuta.
 //GLSL luce muy similar a C
 const char *vertexShaderSource = 
     //Cada shader empieza con la declaración de su versión y el perfil que vamos a utilizar
@@ -84,6 +85,7 @@ int main(int argc, char *argv[]){
     };
 
     unsigned int VBO;
+    glGenBuffers(1, &VBO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
