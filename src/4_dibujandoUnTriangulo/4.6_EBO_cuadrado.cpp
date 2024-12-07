@@ -180,9 +180,9 @@ int main(int argc, char *argv[]){
         usleep(1000000/60);
     }
 
-    //Opcional: Desasingar todos los recursos una vez que han cumplido sus propositos
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
     glDeleteProgram(shaderProgram);
 
     glfwTerminate();

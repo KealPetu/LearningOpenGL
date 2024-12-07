@@ -153,6 +153,10 @@ int main(int argc, char *argv[]){
 
         glfwPollEvents();
     }
+    
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteProgram(shaderProgram);
 
     glfwTerminate();
     return 0;
