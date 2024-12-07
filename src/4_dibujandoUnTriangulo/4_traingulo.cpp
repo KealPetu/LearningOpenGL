@@ -126,6 +126,7 @@ int main(int argc, char *argv[]){
 
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);
+        glBindVertexArray(0);
 
         //verifica y llama los eventos e intercambia los buffers
         glfwSwapBuffers(window);
