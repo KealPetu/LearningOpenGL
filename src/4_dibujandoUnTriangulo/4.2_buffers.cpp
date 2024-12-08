@@ -64,11 +64,12 @@ int main(int argc, char *argv[]){
     //Entonces podemos hacer una llamada a la función glBufferData que copia los datos de vertices previamente definidos a la memoria del Buffer.
 
     //glBufferData es una función que se encarga de copiar datos definidos por el usuario hacia el buffer actualmente enlazado.
+    int size = sizeof(vertices);
     glBufferData(
         //El primer argumento es el tipo de buffer al que queremos copiar los datos: el VBO enlazado al GL_ARRAY_BUFFER. 
         GL_ARRAY_BUFFER, 
         //El segundo argumento es el tamaño de los datos en bytes.
-        sizeof(vertices), 
+        size, 
         //El tercer argumento son los datos que vamos a enviar.
         vertices, 
         //El cuarto argumento especifica como queremos que la GPU maneje los datos. Puede tener 3 formas:
