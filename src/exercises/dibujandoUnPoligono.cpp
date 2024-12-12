@@ -5,6 +5,8 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
+const int SCR_WIDTH = 840, SCR_HEIGHT = 840;
+
 const char *vertexShaderSource = 
     "#version 330 core\n"
     "layout (location = 0) in vec2 aPos;\n"
@@ -46,7 +48,7 @@ int main(int argc, char *argv[]){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(840, 840, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
 
     if (window == NULL){
 
