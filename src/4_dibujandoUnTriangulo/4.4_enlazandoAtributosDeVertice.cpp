@@ -10,7 +10,7 @@ const char *vertexShaderSource =
     "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
     "}\0";
 
-const char *fragmentShaderSource = 
+const char *orangeFragmentShaderSource = 
     "#version 330 core\n"
     "out vec4 FragColor;\n"
     "void main()\n"
@@ -104,7 +104,7 @@ int main(int argc, char *argv[]){
     unsigned int fragmentShader;
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glShaderSource(fragmentShader, 1, &orangeFragmentShaderSource, NULL);
 
     glCompileShader(fragmentShader);
 

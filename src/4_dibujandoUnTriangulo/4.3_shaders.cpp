@@ -26,7 +26,7 @@ const char *vertexShaderSource =
     "}\0";
 
     //Los colores son representados como un vector de 4 valores: rojo, verde, azul y alpha (opacidad), comunmente abreviados como RGBA.
-const char *fragmentShaderSource = 
+const char *orangefFragmentShaderSource = 
     "#version 330 core\n"
     //El 'fragment shader' solamente requiere de una variable de salida, y la cual es un vector de tamano de 4. 
     //Podemos declarar la variable de salida con la palabra clave 'out' y la cual llamaremos 'FragColor'
@@ -145,7 +145,7 @@ int main(int argc, char *argv[]){
     //Esta vez, definimos el tipo de shader que vamos a utilizar a: GL_FRAGMENT_SHADER
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glShaderSource(fragmentShader, 1, &orangefFragmentShaderSource, NULL);
 
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
 
