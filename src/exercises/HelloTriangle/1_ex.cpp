@@ -2,7 +2,8 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
-#include <unistd.h>
+
+//1. Try to draw 2 triangles next to each other using glDrawArrays by adding more vertices to your data
 
 const char *vertexShaderSource = 
     "#version 330 core\n"
@@ -20,20 +21,11 @@ const char *orangeFragmentShaderSource =
     "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
     "}";
 
-const char *yellowFragmentShaderSource = 
-    "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "void main()\n"
-    "{\n"
-    "   FragColor = vec4(1.0f, 1.0f, 0.0f, 1.0f);\n"
-    "}";
-
-
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 void processInput(GLFWwindow *window);
 
-void createMyShaderProgram(unsigned int *orangeShaderProgram, unsigned int *yellowShaderProgram);
+void createMyShaderProgram(unsigned int* shaderProgram);
 
 void checkShaderCompilationErrors(unsigned int* shader, int type);
 
@@ -94,8 +86,9 @@ int main(int argc, char *argv[]){
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     
-    unsigned int orangeShaderProgram, yellowShaderProgram;
-    createMyShaderProgram(&orangeShaderProgram, &yellowShaderProgram);
+    unsigned int shaderProgram;
+    createMyShaderProgram(&shaderProgram);
+    glUseProgram(shaderProgram);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glBindVertexArray(VAO);
 
@@ -106,10 +99,7 @@ int main(int argc, char *argv[]){
         processInput(window);
 
         glClear(GL_COLOR_BUFFER_BIT);
-        glUseProgram(orangeShaderProgram);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
-        glUseProgram(yellowShaderProgram);
-        glDrawArrays(GL_TRIANGLES, 3, 6);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
 
         //verifica y llama los eventos e intercambia los buffers
         glfwSwapBuffers(window);
@@ -119,8 +109,7 @@ int main(int argc, char *argv[]){
     glBindVertexArray(0);
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    glDeleteProgram(orangeShaderProgram);
-    glDeleteProgram(yellowShaderProgram);
+    glDeleteProgram(shaderProgram);
 
     glfwTerminate();
     return 0;
@@ -137,41 +126,29 @@ void processInput(GLFWwindow *window){
         glfwSetWindowShouldClose(window, true);
 }
 
-void createMyShaderProgram(unsigned int *orangeShaderProgram, unsigned int *yellowShaderProgram){
+void createMyShaderProgram(unsigned int *shaderProgram){
 
-    unsigned int vertexShader, orangeFragmentShader, yellowFragmentShader;
+    unsigned int vertexShader, fragmentShader;
     
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
     glCompileShader(vertexShader);
     checkShaderCompilationErrors(&vertexShader, 0);
 
-    orangeFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(orangeFragmentShader, 1, &orangeFragmentShaderSource, NULL);
-    glCompileShader(orangeFragmentShader);
-    checkShaderCompilationErrors(&orangeFragmentShader, 1);
+    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &orangeFragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
+    checkShaderCompilationErrors(&fragmentShader, 1);
 
-    yellowFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(yellowFragmentShader, 1, &yellowFragmentShaderSource, NULL);
-    glCompileShader(yellowFragmentShader);
-    checkShaderCompilationErrors(&yellowFragmentShader, 1);
-
-    *orangeShaderProgram = glCreateProgram();
-    glAttachShader(*orangeShaderProgram, vertexShader);
-    glAttachShader(*orangeShaderProgram, orangeFragmentShader);
-    glLinkProgram(*orangeShaderProgram);
-    checkShaderProgramLinkingErrors(orangeShaderProgram);
-
-    *yellowShaderProgram = glCreateProgram();
-    glAttachShader(*yellowShaderProgram, vertexShader);
-    glAttachShader(*yellowShaderProgram, yellowFragmentShader);
-    glLinkProgram(*yellowShaderProgram);
-    checkShaderProgramLinkingErrors(yellowShaderProgram);
+    *shaderProgram = glCreateProgram();
+    glAttachShader(*shaderProgram, vertexShader);
+    glAttachShader(*shaderProgram, fragmentShader);
+    glLinkProgram(*shaderProgram);
+    checkShaderProgramLinkingErrors(shaderProgram);
 
 
     glDeleteShader(vertexShader);
-    glDeleteShader(orangeFragmentShader);
-    glDeleteShader(yellowFragmentShader);
+    glDeleteShader(fragmentShader);
 }
 
 void checkShaderCompilationErrors(unsigned int* shader, int type){

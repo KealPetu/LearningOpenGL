@@ -2,7 +2,8 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
-#include <unistd.h>
+
+//2. Now create the same 2 triangles using two different VAOs and VBOs for their data
 
 const char *vertexShaderSource = 
     "#version 330 core\n"
@@ -12,7 +13,7 @@ const char *vertexShaderSource =
     "   gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0);\n"
     "}\0";
 
-const char *orangeFragmentShaderSource = 
+const char *fragmentShaderSource = 
     "#version 330 core\n"
     "out vec4 FragColor;\n"
     "void main()\n"
@@ -59,37 +60,54 @@ int main(int argc, char *argv[]){
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSwapInterval(1);
 
+    unsigned int VBO_1, VAO_1, VBO_2, VAO_2;
 
-    float vertices[] = {
+    float vertices_1[] = {
         0.5f,  0.5f,
         0.5f, -0.5f,
-        -0.5f,  0.5f,
-        0.5f, -0.5f,
-        -0.5f,  0.5f,
-        -0.5f, -0.5f,
+       -0.5f,  0.5f,
     };
 
-    unsigned int VBO, VAO;
+    float vertices_2[] = {
+        0.5f, -0.5f,
+       -0.5f,  0.5f,
+       -0.5f, -0.5f,
+    };
 
-    glGenVertexArrays(1, &VAO);
+    glGenVertexArrays(1, &VAO_1);
+    glGenBuffers(1, &VBO_1);
 
-    glGenBuffers(1, &VBO);
-    glBindVertexArray(VAO);
+    glBindVertexArray(VAO_1);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, VBO_1);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_1), vertices_1, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
 
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    glBindVertexArray(0);
+
+    glGenVertexArrays(1, &VAO_2);
+    glGenBuffers(1, &VBO_2);
+
+    glBindVertexArray(VAO_2);
+
+        glBindBuffer(GL_ARRAY_BUFFER, VBO_2);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices_2), vertices_2, GL_STATIC_DRAW);
+
+        glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+        glEnableVertexAttribArray(0);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
     glBindVertexArray(0);
     
     unsigned int shaderProgram;
     createMyShaderProgram(&shaderProgram);
     glUseProgram(shaderProgram);
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glBindVertexArray(VAO);
 
     // Ciclo de renderizado
     while(!glfwWindowShouldClose(window)){
@@ -97,8 +115,14 @@ int main(int argc, char *argv[]){
         // Entrada de Usuario
         processInput(window);
 
+        glBindVertexArray(VAO_1);
+
         glClear(GL_COLOR_BUFFER_BIT);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        glBindVertexArray(VAO_2);
+
+        glDrawArrays(GL_TRIANGLES, 0, 3);
 
         //verifica y llama los eventos e intercambia los buffers
         glfwSwapBuffers(window);
@@ -106,8 +130,10 @@ int main(int argc, char *argv[]){
     }
 
     glBindVertexArray(0);
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
+    glDeleteVertexArrays(1, &VAO_1);
+    glDeleteBuffers(1, &VBO_1);
+    glDeleteVertexArrays(1, &VAO_2);
+    glDeleteBuffers(1, &VBO_2);
     glDeleteProgram(shaderProgram);
 
     glfwTerminate();
@@ -135,7 +161,7 @@ void createMyShaderProgram(unsigned int *shaderProgram){
     checkShaderCompilationErrors(&vertexShader, 0);
 
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &orangeFragmentShaderSource, NULL);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
     glCompileShader(fragmentShader);
     checkShaderCompilationErrors(&fragmentShader, 1);
 
