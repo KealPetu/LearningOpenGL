@@ -3,20 +3,24 @@
 
 #include <iostream>
 
+//Poodemos enviar valores de un shader a otro con las palabras clave in y out.
 const char *vertexShaderSource = 
     "#version 330 core\n"
     "layout (location = 0) in vec2 aPos;\n"
+    "out vec4 vertexColor;\n"
     "void main()\n"
     "{\n"
     "   gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0);\n"
+    "   vertexColor = vec4(0.5, 0.0, 0.0, 1.0);\n"
     "}\0";
-
+//En este casoo, del vertex shader recibimos un vec4 que contiene los valores de color que vamos a utilizar en el fragment shader.
 const char *orangeFragmentShaderSource = 
     "#version 330 core\n"
     "out vec4 FragColor;\n"
+    "in vec4 vertexColor;"
     "void main()\n"
     "{\n"
-    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    "   FragColor = vertexColor;\n"
     "}";
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -61,8 +65,8 @@ int main(int argc, char *argv[]){
     unsigned int VBO, VAO, EBO;
 
     float vertices[] = {
-        0.5f,  0.5f,
-        0.5f, -0.5f,
+         0.5f,  0.5f,
+         0.5f, -0.5f,
         -0.5f,  0.5f,
         -0.5f, -0.5f,
     };
@@ -191,4 +195,3 @@ void checkShaderProgramLinkingErrors(unsigned int* shaderProgram){
         std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
     }
 }
-

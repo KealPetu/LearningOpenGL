@@ -2,21 +2,28 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <math.h>
 
 const char *vertexShaderSource = 
     "#version 330 core\n"
     "layout (location = 0) in vec2 aPos;\n"
+    "uniform float timeValue;\n"
     "void main()\n"
     "{\n"
-    "   gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0);\n"
+    "   float myZPosition = (cos(timeValue)/2.0f) + 1.0f;"
+    "   gl_Position = vec4(aPos.x, aPos.y, 0.0f, myZPosition);\n"
     "}\0";
 
 const char *orangeFragmentShaderSource = 
     "#version 330 core\n"
     "out vec4 FragColor;\n"
+    //Los uniforms son otra forma de enviar datos de la CPU a la GPU.
+    //Los uniforms son globales, es decir, que son variables unicas por cada shader program.
+    //Los uniforms mantendran sus valores hasta que sean reiniciados o actualizados.
+    "uniform vec4 ourColor;\n"
     "void main()\n"
     "{\n"
-    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    "   FragColor = ourColor;\n"
     "}";
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
@@ -61,8 +68,8 @@ int main(int argc, char *argv[]){
     unsigned int VBO, VAO, EBO;
 
     float vertices[] = {
-        0.5f,  0.5f,
-        0.5f, -0.5f,
+         0.5f,  0.5f,
+         0.5f, -0.5f,
         -0.5f,  0.5f,
         -0.5f, -0.5f,
     };
@@ -98,8 +105,22 @@ int main(int argc, char *argv[]){
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glBindVertexArray(VAO);
 
+    float greenValue;
+    short unsigned int vertexColorLocation;
+
     // Ciclo de renderizado
     while(!glfwWindowShouldClose(window)){
+
+        //Nuestro uniform se encuentra vacio actualmente, entonces intentemos darle un valor.
+        //Vamos a cambiar el valor del cuadrado de oscuro a verde con el tiempo
+        //Variemos el color con la funcion seno (recibe valores en radianes)
+        greenValue = (sin(glfwGetTime()) / 2.0f) + 0.5f;
+        //Ahora, busquemos la ubicacion del uniform en nuestro shader
+        vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+        int zValueLocation = glGetUniformLocation(shaderProgram, "timeValue");
+        //Asignamos el valor al uniform con la siguiente funcion
+        glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+        glUniform1f(zValueLocation, glfwGetTime());
 
         // Entrada de Usuario
         processInput(window);
@@ -191,4 +212,3 @@ void checkShaderProgramLinkingErrors(unsigned int* shaderProgram){
         std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
     }
 }
-

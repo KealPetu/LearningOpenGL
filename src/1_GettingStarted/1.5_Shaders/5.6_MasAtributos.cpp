@@ -3,21 +3,32 @@
 
 #include <iostream>
 
+//Podemos enviar valores de un shader a otro con las palabras clave in y out.
 const char *vertexShaderSource = 
     "#version 330 core\n"
     "layout (location = 0) in vec2 aPos;\n"
+    "layout (location = 1) in vec3 aColor;\n"
+    "uniform float timeValue;\n"
+    "uniform float aspect;\n"
+    "out vec4 vertexColor;\n"
     "void main()\n"
     "{\n"
-    "   gl_Position = vec4(aPos.x, aPos.y, 0.0, 1.0);\n"
+    "   float wValue = (sin(timeValue)/2.0f) + 1.0f;\n"
+    "   gl_Position = vec4(aPos.x/aspect, aPos.y, 0.0f, wValue);\n"
+    "   vertexColor = vec4(aColor, 1.0f);\n"
     "}\0";
-
+//En este casoo, del vertex shader recibimos un vec4 que contiene los valores de color que vamos a utilizar en el fragment shader.
 const char *orangeFragmentShaderSource = 
     "#version 330 core\n"
     "out vec4 FragColor;\n"
+    "in vec4 vertexColor;"
     "void main()\n"
     "{\n"
-    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    "   FragColor = vertexColor;\n"
     "}";
+
+const int WIDTH = 1280, HEIGHT = 720;
+float aspect = (float)WIDTH/HEIGHT;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -36,7 +47,7 @@ int main(int argc, char *argv[]){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", NULL, NULL);
 
     if (window == NULL){
 
@@ -54,17 +65,17 @@ int main(int argc, char *argv[]){
         return -1;
     }  
 
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, WIDTH, HEIGHT);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSwapInterval(1);
 
     unsigned int VBO, VAO, EBO;
 
     float vertices[] = {
-        0.5f,  0.5f,
-        0.5f, -0.5f,
-        -0.5f,  0.5f,
-        -0.5f, -0.5f,
+         0.5f,  0.5f, 1.0f, 0.0f, 0.0f,
+         0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+        -0.5f,  0.5f, 0.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, 1.0f, 1.0f, 1.0f
     };
 
     unsigned int indices[] = {
@@ -85,8 +96,11 @@ int main(int argc, char *argv[]){
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2* sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
@@ -100,6 +114,11 @@ int main(int argc, char *argv[]){
 
     // Ciclo de renderizado
     while(!glfwWindowShouldClose(window)){
+
+        int timeValueLocation = glGetUniformLocation(shaderProgram, "timeValue");
+        glUniform1f(timeValueLocation, glfwGetTime());
+        int aspectValueLocation = glGetUniformLocation(shaderProgram, "aspect");
+        glUniform1f(aspectValueLocation, aspect);
 
         // Entrada de Usuario
         processInput(window);
@@ -125,6 +144,7 @@ int main(int argc, char *argv[]){
 void framebuffer_size_callback(GLFWwindow* window, int width, int height){
 
     glViewport(0, 0, width, height);
+    aspect = (float)width/height;
 }
 
 void processInput(GLFWwindow *window){
@@ -191,4 +211,3 @@ void checkShaderProgramLinkingErrors(unsigned int* shaderProgram){
         std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
     }
 }
-
