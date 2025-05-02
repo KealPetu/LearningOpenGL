@@ -2,7 +2,6 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
-#include <unistd.h>
 
 const char *vertexShaderSource = 
     "#version 330 core\n"
@@ -176,8 +175,6 @@ int main(int argc, char *argv[]){
         //verifica y llama los eventos e intercambia los buffers
         glfwSwapBuffers(window);
         glfwPollEvents();
-        //metodo para que entre cada fotograma, pase una cierta cantidad de tiempo en microsegundos
-        usleep(1000000/60);
     }
 
     glDeleteVertexArrays(1, &VAO);
