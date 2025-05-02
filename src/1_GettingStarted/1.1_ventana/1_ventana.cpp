@@ -6,86 +6,89 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 int main(int argc, char *argv[])
 {
-    glfwInit(); //Funcion Para inicializar la libreria de GLFW
+    //Function to initialize the GLFW library
+    glfwInit();
 
-    glfwWindowHint( //Funcion que se puede utilizar para configurar una caracteristica de la ventana
-        GLFW_CONTEXT_VERSION_MAJOR, //La caracteristica que queremos modificar es la Version de OpenGL mayor que vamos a utilizar
-        3   //En este caso Queremos utilizar OpenGL 3.3, por los que damos el valor entero de 3 a la configuracion
-        );
+    //Function used to configure a feature to the window
+    glfwWindowHint(
+        GLFW_CONTEXT_VERSION_MAJOR, //On this field we tell OpenGL wich feature we want to modify, in this case, we want to modify the major version of OpenGL
+        3   //We want to use the version 3.3, so we set the value as 3
+    );
 
     glfwWindowHint(
-        GLFW_CONTEXT_VERSION_MINOR, //La version de OpenGL menor
-        3   //Open GL 3.3
-        );
+        GLFW_CONTEXT_VERSION_MINOR, //Minor version of OpenGL
+        3   //OpenGL 3.3
+    );
 
     glfwWindowHint(
-        GLFW_OPENGL_PROFILE, //EL perfil de OpenGL que vamos a utlizar al crear una ventana
-        GLFW_OPENGL_CORE_PROFILE    //Solo vamos a utilizar el Perfil 'Core' de OpenGL
-                                    //Lo que significa que no vamos a tener acceso a funciones depreciadas
-        );
+        GLFW_OPENGL_PROFILE,    //Here, we specify the OpenGL profile we are going to use.
+        GLFW_OPENGL_CORE_PROFILE//When configuring the glad.c file, I only chose the COre version, so we are not going to have access to deprecated functions.
+    );
 
-    // Ahora, creamos la el objeto de la Ventana
-    // El objeto contiene todos los datos del ventanaje, que son requeridos para la mayor parte de las funciones de GLFW
+    //Now, we are going to create the Window object.
+    //This object contains all the windowing parameters, which are required for most of the functions of GLFW.
     GLFWwindow* window = glfwCreateWindow(
-        800,    //Ancho de la ventana en pixeles
-        600,    //Alto de la ventana en pixeles
-        "LearnOpenGL",  //Nombre de la ventana
-        NULL,   //El monitor a usar para la ventana, NULL si se va a usar el monitor primario
-        NULL);  //La ventana con la que va a compartir recursos, NULL si es una nueva ventana
+        800,            //We set the window width in pixels
+        600,            //Window height
+        "LearnOpenGL",  //Name of the window
+        NULL,           //Which monitor is the window going to use. If left NULL, we will use the default primary monitor.
+        NULL            //If there's another window, we set in this field wich window is it going to share resources with.
+    );
 
-    if (window == NULL) //SI no existe la ventana
-    {
-        std::cout << "Failed to create GLFW window" << std::endl;   //Imprime el error de la creacion de la ventana
-        glfwTerminate();    //Termina el programa
-        return -1;  //Devuelve -1 como error
+    //If the window doesn't exist
+    if (window == NULL){
+        std::cout << "Failed to create GLFW window" << std::endl;   //Prints message error.
+        glfwTerminate();                                            //Uses this function to end the program.
+        return -1;                                                  //Returns -1 as error.
     }
 
-    glfwMakeContextCurrent(window); //Funcion utilizada para intercalar diferentes contextos de OpenGL
-                                    //permitiendo utilizar diferentes ventanas o configuraciones de renderizado
-    //Todo lo de Aqui abajo se renderizara en "window"
-    //glfwMakeContextCurrent(window2)
-    //Todo lo de Aqui abajo se renderizara en "window2"
+    
+    //This function allows us to intercalate between different OpenGL contexts (windows), allowing us to utiliza different windows or rendering settings.
+    glfwMakeContextCurrent(window);
+    //Everything under here will be rendered on "window"
+    //...
 
-    //Antes de ejecutar cualquier funcion de OpenGL, debemos incializar GLAD
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) //Inicializa la API de OpenGL usando glfw como el loader
+    //If we create another window
+
+    //glfwMakeContextCurrent(window2)
+    //Everything under here will be rendered on "window2"
+    //...
+
+    //Before using any OpenGL function, we need to load them by using GLAD
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) //We initilalize the OpenGL API using GLFW.
     {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }  
 
-    //Definimos la region en la ventana en la cual se va a renderizar.
+    //We define the region of the window where is going to be rendered
     glViewport(
-        0,      //La ubicacion x desde donde se genera el ViewPort: 0 = Izquierda en la ventana
-        0,      //La ubicacion y desde donde se genera el ViewPort: 0 = Abajo en la vente
-        800,    //Tamaño de ancho del ViewPort en Pixeles
-        600);   //Tamaño en altura del ViewPort en Pixeles
+        0,      //X location from where the viewport is generated: 0 = left from the window.
+        0,      //Y location from where the viewport is generated: 0 = base from the window.
+        800,    //Width of the ViewPort in pixels.
+        600);   //Height of the ViewPort in pixels.
 
-    //Le decimos a GLFW que queremos utilizar esta funcion en cada ventana al registrarla:
+    //With this method, can set callbacks, fucntions that get triggered whenever the framebuffer (area where the window is rendered) of a specified window changes.
+    //We want the viewport and window size to be the same everytime, so we create the "framebuffer_size_callback" function and tell glfw to use it whenever we change the window size.
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSwapInterval(1); // Habilitamos Sincronización vertical
-
-    //Ahora, no queremos que la aplicacion dibuje e inmediatamente se cierre, queremos que la aplicacion siga
-    //dibujando imagenes y maneje entradas del usuario hasta que se diga al programa de foma explicita que cierre
-    //Por esta razón, creamos el ciclo de renderizado o 'render loop':
     
-    while(!glfwWindowShouldClose(window))   //Verifica al inicio de cada iteración si GLFW ha sido instruido en cerrarse.
-                                            //Si ese es el caso, la funcion devuelve 'true' y el ciclo finaliza
-    {
-        glfwSwapBuffers(window);    //Verifica si algun evento fue activado (como teclado o mouse), actualiza el estado de la ventana
-                                    //y llama las funciones correspondientes (que pueden ser registradas por medio de callbacks)
-        glfwPollEvents();   //Cambiara el color del Buffer (Un largo buffer 2d que contiene los valores de colores de cada pixel)
-                            //que es utilizado para renderizar y mostrarlo como salida en la pantalla
+    //We don't want our program open and close immediately, we want it to keep drawing images and manages user inputs until we explicitly tell the program to close.
+    //For this reason, we create this "render loop".
+
+    //It verifies if GLFW has been set to close the window
+    //If that's the case, the function returns 'true' and the render loop ends.
+    while(!glfwWindowShouldClose(window)){
+        glfwSwapBuffers(window);//This event verifies if there has been any input, and changes the window state, then, calls the fucntions(that could've been registered in the callbacks).
+        glfwPollEvents();       //Changes the color buffer (a long 2d buffer that contains the color value of each pixel) that is then used to render and shown to the monitor.
     }
 
-    glfwTerminate();    //Tan pronto como salgamos del ciclo de renderizado, debemos eliminar/limpiar todos los recursos de     
-                        //GLFW que hemos asignado 
+    //As soon as we exit the render loop, we must clean the assigned GLFW resources.
+    glfwTerminate(); 
     return 0;
 }
 
-
-//Cada vez que el usuario cambie el tamaño de la ventana, el ViewPort debería cambiar también.
-//Registramos una función 'callback' en la ventana que es llamada cada vez que la ventana cambia de dimensiones.
-//La funcion frambuffer toma un GLFWwindow como primer argumento y 2 enteros indicando las nuevas dimensiones de la ventana
+//Function we set that, each time the user changes the window size, the Viewport shall change too. The frambuffer functioon takes a GLFWwindow (the window) and 2 integers (new window dimensions).
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
