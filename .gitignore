@@ -1,12 +1,2 @@
-*.json
+/output
 *.exe
-*.o
-output/
-out/
-Makefile
-.vs/
-.vscode/
-lib/
-include/
-glad.c
-*.dll
