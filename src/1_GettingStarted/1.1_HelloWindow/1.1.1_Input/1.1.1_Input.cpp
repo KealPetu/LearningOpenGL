@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
 
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(800, 600, "LearningOpenGL", NULL, NULL);
 
     if (window == NULL)
     {
@@ -39,7 +39,8 @@ int main(int argc, char *argv[])
 
     while(!glfwWindowShouldClose(window))   
     {
-        processInput(window);//Llamamos el proceso en cada iteracion del ciclo
+        //Input handler function
+        processInput(window);
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -53,16 +54,12 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-//GLFW tiene varias fucniones de entrada, en esta ocasón se utilizará la funcion glfwGetKey
-//que toma como entrada a la ventana y la tecla presionada.
-//Esta función devolverá si una tecla está siendo presionada.
-//Estamos creado un proceso de entrada para mantener el codigo organizado
+//GLFW has many input functions, in this occation we'll use the function glfwGetKey that takes as input the window and the key being pressed. This function will return if a certain key is being pressed.
 void processInput(GLFWwindow *window)
 {
-    //Aqui verificamos que el ususario haya presionado una tecla (sino, la funcion deviuelve
-    //GLFW_RELEASE)
+
+    //We verify that the user has pressed a key (else, the function returns a GLFW_RELEASE)
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        //Si el usuario SI presiono la tecla, cerramos la ventana al conifgurar la funcion
-        //WindowShouldClose como 'true'  
+        //If the user HAS pressed the key, in this case, we close the window by configuring the function glfwSetWindowShouldClose as true
         glfwSetWindowShouldClose(window, true);
 }

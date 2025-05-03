@@ -37,36 +37,38 @@ int main(int argc, char *argv[]){
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSwapInterval(1);
 
-    // Ciclo de renderizado
     while(!glfwWindowShouldClose(window)){
 
-        // Entrada de Usuario
+        // User Input
         processInput(window);
 
-        //comandos de Renderizado aquí
-        //...
+        //Rendering commands here...
 
+        /*
+        To veryfy that everything works correctly, we'll color the screen with a color of our choice.
+        At the begining of each fotogram we want to clear the window, otherwise we would only see data from the previous fotogram.
+        We can clear the screen's color buffer using glClear whwere we pass in buffer bits to specify which buffer we would like to clear.
+        The possible bits we can set are:
+        - GL_COLOR_BUFFER_BIT
+        - GL_DEPTH_BUFFER_BIT
+        - GL_STENCIL_BUFFER_BIT
+        
+        For now, we're only interested in the color values, so we'll only clean the values of our color buffer.
+        */
 
-        //Para verificar que todo funcione correctamente, quieremos colorear la pantalla con un color
-        //de nuestra elección
-        //Queremos limpiar la ventana al inicio del fotograma, de otra forma veriamos datos del fotograma
-        //anterior.
-        //Utilizamos glClear en el que pasamos bits de buffer para especificar en que buffer 
-        //queremos limpiar.
-        //Los bits posible que podemos pasar son:
-        //GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT y GL_STENCIL_BUFFER_BIT.
-        //Por ahora solo nos interesan los valores de color, por lo que solo limpiaremos los valores
-        //del buffer de color.
+        //glClearColor is a state-setting function that defines a specific color on the screen.
+        glClearColor(
+            0.5f,   //Red value (0 - 1)
+            0.1f,   //Green value (0 - 1)
+            0.9f,   //Blue value (0 - 1)
+            1.0f    //Alpha (Transparency) (0 - 1)
+        );
 
-        //glClearColor es una funcion 'state-setting', que se encarga de definir el color en especifico 
-        //de la pantalla
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        //glClear es una funcion 'state-using', que utiliza el estado actual para recuperar el color de limpie 
+        //glClear function clears the set buffer, the entire color buffer will be filled with the color configured previously.
         glClear(GL_COLOR_BUFFER_BIT);
 
-        //verifica y llama los eventos e intercambia los buffers
-        glfwSwapBuffers(window);
         glfwPollEvents();
+        glfwSwapBuffers(window);
     }
 
     glfwTerminate();
