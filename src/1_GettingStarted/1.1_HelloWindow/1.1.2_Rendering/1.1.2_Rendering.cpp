@@ -5,6 +5,9 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
+unsigned short WIDTH = 800;
+unsigned short  HEIGHT = 600;
+
 int main(int argc, char *argv[]){
 
     glfwInit();
@@ -15,7 +18,7 @@ int main(int argc, char *argv[]){
 
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", NULL, NULL);
 
     if (window == NULL){
 
@@ -32,7 +35,7 @@ int main(int argc, char *argv[]){
         return -1;
     }  
 
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, WIDTH, HEIGHT);
 
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSwapInterval(1);
