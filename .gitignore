@@ -1,3 +1,4 @@
 /output
 /out
 *.exe
+/.vscode/tasks.json
