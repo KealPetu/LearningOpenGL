@@ -1,0 +1,218 @@
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include <iostream>
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow *window);
+
+unsigned short WIDTH = 800;
+unsigned short  HEIGHT = 600;
+
+void validateShaderCompilation(GLuint shader, GLenum type) {
+
+    GLint success;
+    GLchar infoLog[512];
+
+    if (type != GL_VERTEX_SHADER && type != GL_FRAGMENT_SHADER) {
+        std::cerr << "ERROR::SHADER::UNKNOWN_TYPE" << std::endl;
+        return;
+    }
+
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(shader, 512, NULL, infoLog);
+        std::cout << "\nERROR::SHADER::" << (type == GL_VERTEX_SHADER ? "VERTEX" : "FRAGMENT") 
+                  << "::COMPILATION_FAILED\n" << infoLog << std::endl;
+        exit(EXIT_FAILURE);
+    }
+}
+
+void createVertexShader(GLuint &vertexShader){
+
+    const GLchar *VERTEX_SHADER_SOURCE =
+    "#version 460 core\n"
+    "layout (location = 0) in vec2 aPos;\n"
+    "void main(){\n"
+    "    gl_Position = vec4(aPos.x, aPos.y, 0.0f, 1.0f);\n"
+    "}\0";
+
+    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
+    glShaderSource(vertexShader, 1, &VERTEX_SHADER_SOURCE, NULL);
+    glCompileShader(vertexShader);
+
+    validateShaderCompilation(vertexShader, GL_VERTEX_SHADER);
+}
+
+void createFragmentShader(GLuint &fragmentShader){
+
+    const GLchar *FRAGMENT_SHADER_SOURCE =
+    "#version 460 core\n"
+    "out vec4 FragColor;\n"
+    "void main(){\n"
+    "    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    "}\0";
+    
+    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+    glShaderSource(fragmentShader, 1, &FRAGMENT_SHADER_SOURCE, NULL);
+    glCompileShader(fragmentShader);
+
+    validateShaderCompilation(fragmentShader, GL_FRAGMENT_SHADER);
+}
+
+void validateShaderProgramLinking(GLuint shaderProgram) {
+
+    GLint success;
+    GLchar infoLog[512];
+
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        std::cout << "\nERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+        exit(EXIT_FAILURE);
+    }
+}
+
+void createShaderProgram(GLuint &shaderProgram, GLuint vertexShader, GLuint fragmentShader){
+
+    shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+
+    validateShaderProgramLinking(shaderProgram);
+}
+
+void createEBO(GLuint &EBO, GLuint *indices, size_t size){
+
+    glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, size * sizeof(GLuint), indices, GL_STATIC_DRAW);
+}
+
+void createVBO(GLuint &VBO, GLfloat *vertices, size_t size){
+
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, size * sizeof(GLfloat), vertices, GL_STATIC_DRAW);
+}
+
+void configureVAO(GLuint &VAO, GLuint &VBO, GLuint &EBO){
+
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+
+    GLfloat triangleVertices[] = {
+        -0.5f,  -0.5f,  //lower left    0
+        0.5f,   -0.5f,  //lower right   1
+        0.5f,   0.5f,   //upper right   2
+        -0.5f,  0.5f,   //upper left    3
+    };
+    createVBO(VBO, triangleVertices, sizeof(triangleVertices)/sizeof(triangleVertices[0]));
+
+    GLuint indices[]= { 
+        0, 1, 2,
+        0, 2, 3 
+    };
+    createEBO(EBO, indices, sizeof(indices)/sizeof(indices[0]));
+
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (void*)0);
+    glEnableVertexAttribArray(0);
+}
+
+void render(GLuint shaderProgram, GLuint VAO){
+    glClear(GL_COLOR_BUFFER_BIT);
+    glUseProgram(shaderProgram);
+    glBindVertexArray(VAO);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);
+    glUseProgram(0);
+}
+
+int main(int argc, char *argv[]){
+
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, *argv, NULL, NULL);
+
+    if (window == NULL){
+
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return EXIT_FAILURE;
+    }
+
+    glfwMakeContextCurrent(window);
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
+
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return EXIT_FAILURE;
+    }  
+
+    glViewport(0, 0, WIDTH, HEIGHT);
+
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSwapInterval(1);
+
+    GLuint VAO, VBO, EBO;
+
+    configureVAO(VAO, VBO, EBO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    GLuint vertexShader;
+    createVertexShader(vertexShader);
+
+    GLuint fragmentShader;
+    createFragmentShader(fragmentShader);
+
+    GLuint shaderProgram;
+    createShaderProgram(shaderProgram, vertexShader, fragmentShader);
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    while(!glfwWindowShouldClose(window)){
+
+        // User Input
+        processInput(window);
+        glClearColor(0.5f, 0.1f, 0.9f, 1.0f);
+
+        // Render
+        render(shaderProgram, VAO);
+
+        glfwPollEvents();
+        glfwSwapBuffers(window);
+    }
+
+    // Cleanup
+    glBindVertexArray(0);
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+    glDeleteProgram(shaderProgram);
+
+    glfwTerminate();
+    return EXIT_SUCCESS;
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height){
+
+    glViewport(0, 0, width, height);
+}
+
+void processInput(GLFWwindow *window){
+
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) 
+        glfwSetWindowShouldClose(window, true);
+}
