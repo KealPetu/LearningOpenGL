@@ -3,17 +3,16 @@
 
 #include <iostream>
 
-constexpr int WINDOW_WIDTH {800};
-constexpr int WINDOW_HEIGHT {600};
-const char* WINDOW_NAME {"01_Window"};
+constexpr int WINDOW_WIDTH  { 800 };
+constexpr int WINDOW_HEIGHT { 600 };
+auto WINDOW_NAME            { "01_Window" };
 
-void Log(const char* message){
+void log(const char* message){
     std::cout << message << std::endl;
 }
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-    glViewport(0, 0, width, height);
+void framebuffer_size_callback(GLFWwindow* window, const int WIDTH, const int HEIGHT){
+    glViewport(0, 0, WIDTH, HEIGHT);
 }
 
 int main(){
@@ -21,6 +20,10 @@ int main(){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
 
     GLFWwindow* window {
         glfwCreateWindow(
@@ -32,17 +35,26 @@ int main(){
         )
     };
 
-    if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
-        Log("Failed to initialize glad. Bailing out!");
+    if (window == nullptr) {
+        log("Failed to create GLFW window. Bailing out!");
+        glfwTerminate();
+        return -1;
+    }
+
+    glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+    if(!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))){
+        log("Failed to initialize glad. Bailing out!");
         return -1;
     };
 
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     while(!glfwWindowShouldClose(window)){
+        glClearColor(245.f/255.f, 245.f/255.f, 245.f/255.f, 1.f);
+        glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(window);
-        glClearColor(245/255, 245/255, 245/255, 1.0f);
         glfwPollEvents();
     }
 
