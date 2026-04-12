@@ -27,27 +27,4 @@ endif()
 add_library(glad STATIC "${CMAKE_SOURCE_DIR}/src/glad.c")
 target_include_directories(glad PUBLIC "${INCLUDE_DIR}")
 
-file(GLOB_RECURSE SAMPLE_MAIN_FILES RELATIVE "${CMAKE_SOURCE_DIR}" "${CMAKE_SOURCE_DIR}/src/*/main.cpp")
-if(NOT SAMPLE_MAIN_FILES)
-  message(WARNING "No sample main.cpp files found under src/")
-endif()
-
-foreach(sample_source IN LISTS SAMPLE_MAIN_FILES)
-  get_filename_component(sample_dir "${sample_source}" DIRECTORY)
-  get_filename_component(sample_name "${sample_dir}" NAME)
-  string(REPLACE " " "_" sample_name "${sample_name}")
-
-  set(target_name "${sample_name}_x86_64")
-  add_executable(${target_name} "${sample_source}")
-  set_target_properties(${target_name} PROPERTIES OUTPUT_NAME "${sample_name}.x86_64")
-
-  target_include_directories(${target_name} PRIVATE "${INCLUDE_DIR}")
-  target_link_libraries(
-    ${target_name}
-    PRIVATE
-      glad
-      "${GLFW_LIB}"
-      OpenGL::GL
-      ${PLATFORM_LIBS}
-  )
-endforeach()
+add_subdirectory("${CMAKE_SOURCE_DIR}/src/0_Getting_Started")
