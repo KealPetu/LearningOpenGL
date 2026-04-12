@@ -7,12 +7,21 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
 set(LIB_DIR "${CMAKE_SOURCE_DIR}/lib")
-set(GLFW_STATIC_LIB "${LIB_DIR}/libglfw3.a")
 
 find_package(OpenGL REQUIRED)
 
-if(NOT EXISTS "${GLFW_STATIC_LIB}")
-  message(FATAL_ERROR "Missing GLFW static library: ${GLFW_STATIC_LIB}")
+if(WIN32)
+  set(GLFW_LIB "${LIB_DIR}/windows/glfw3.lib")
+  set(PLATFORM_LIBS opengl32)
+elseif(UNIX)
+  set(GLFW_LIB "${LIB_DIR}/linux/libglfw.a")
+  set(PLATFORM_LIBS dl X11 Xrandr Xi Xxf86vm Xcursor pthread)
+else()
+  message(FATAL_ERROR "Unsupported platform for GLFW linking")
+endif()
+
+if(NOT EXISTS "${GLFW_LIB}")
+  message(FATAL_ERROR "Missing GLFW library: ${GLFW_LIB}")
 endif()
 
 add_library(glad STATIC "${CMAKE_SOURCE_DIR}/src/glad.c")
@@ -37,14 +46,8 @@ foreach(sample_source IN LISTS SAMPLE_MAIN_FILES)
     ${target_name}
     PRIVATE
       glad
-      "${GLFW_STATIC_LIB}"
+      "${GLFW_LIB}"
       OpenGL::GL
-      dl
-      X11
-      Xrandr
-      Xi
-      Xxf86vm
-      Xcursor
-      pthread
+      ${PLATFORM_LIBS}
   )
 endforeach()
