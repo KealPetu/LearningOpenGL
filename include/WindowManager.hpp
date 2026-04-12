@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <string>
 
 void initializeWindow(const int width, const int height, const char* name);
 

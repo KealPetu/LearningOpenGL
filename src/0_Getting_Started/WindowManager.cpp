@@ -12,6 +12,12 @@ void framebuffer_size_callback(GLFWwindow *window, const int WIDTH, const int HE
 
 void initializeGLFW(const int versionMajor, const int versionMinor) {
     glfwInit();
+
+    const std::string initMessage = "GLFW initialized - OpenGL version: " +
+                              std::to_string(versionMajor) + "." +
+                              std::to_string(versionMinor) + " Core Profile";
+    Log(initMessage.c_str());
+
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, versionMajor);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, versionMinor);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -35,6 +41,11 @@ void initializeWindow(const int width, const int height, const char *name) {
         std::exit(EXIT_FAILURE);
     }
 
+    std::string windowMessage = "Window created: \"" + std::string(name) +
+                                "\" (" + std::to_string(width) + "x" +
+                                std::to_string(height) + ")";
+    Log(windowMessage.c_str());
+
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSwapInterval(1);
@@ -55,6 +66,7 @@ void endDrawing() {
 
 void destroyWindow() {
     glfwDestroyWindow(window);
+    Log("Window closed successfully");
 }
 
 bool windowShouldClose() {

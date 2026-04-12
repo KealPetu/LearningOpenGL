@@ -1,13 +1,13 @@
 #include "WindowManager.hpp"
 
-const int WINDOW_WIDTH	{ 800 };
-const int WINDOW_HEIGHT	{ 600 };
+constexpr int WINDOW_WIDTH	{ 800 };
+constexpr int WINDOW_HEIGHT	{ 600 };
 
 GLfloat backgroundColor[4] { 245.f / 255.f, 245.f / 255.f, 245.f / 255.f, 1.f };
 
 int main(){
 	initializeGLFW(3, 3);
-	initializeWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "02_Triangle");
+	initializeWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "EBO");
 
 	//Shader Program creation
 
@@ -76,24 +76,49 @@ int main(){
 	glDeleteShader(fragmentShader);
 
 	//Vertices
-	GLfloat vertices[] = {
-		 0.0f,  0.5f, 0.0f, // top
-		 0.5f, -0.5f, 0.0f, // bottom right
-		-0.5f, -0.5f, 0.0f  // bottom left
+	GLfloat vertices[] {
+		-0.5f, 0.5f,
+		0.5f, 0.5f,
+		0.5f, -0.5f,
+		-0.5f, -0.5f
 	};
 
-	//Vertex Buffer Object (VBO) and Vertex Array Object (VAO)
-	GLuint VBO, VAO;
+	//Indexes
+	GLuint indexes[] {
+		0, 1, 2,
+		0, 2, 3
+	};
+
+	//Vertex Buffer Object (VBO), Vertex Array Object (VAO) and Element Buffer Objects (EBO)
+	GLuint VBO {};
+	GLuint VAO {};
+	GLuint EBO {};
+
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
 
 	glBindVertexArray(VAO);
+
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-		glEnableVertexAttribArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexes), indexes, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), static_cast<void *>(nullptr));
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, NULL);
+
+	// remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
+
+	glBindVertexArray(NULL);
+
+	// You can unbind the VAO afterward so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
+	// VAOs requires a call to glBindVertexArray anyway so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL);
 
 	while (!windowShouldClose()) {
 		glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]);
@@ -102,13 +127,15 @@ int main(){
 		//Draw the triangle
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		//glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 		endDrawing();
 	}
 
 	glDeleteBuffers(1, &VAO);
 	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 	glDeleteProgram(shaderProgram);
 
 	destroyWindow();

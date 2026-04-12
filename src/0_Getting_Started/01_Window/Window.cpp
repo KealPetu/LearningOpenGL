@@ -5,7 +5,7 @@
 
 constexpr int WINDOW_WIDTH  { 800 };
 constexpr int WINDOW_HEIGHT { 600 };
-auto WINDOW_NAME            { "01_Window" };
+auto WINDOW_NAME            { "Window" };
 
 static void Log(const char* message){
     std::cout << message << std::endl;
