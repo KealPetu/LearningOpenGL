@@ -7,7 +7,7 @@ constexpr int WINDOW_WIDTH  { 800 };
 constexpr int WINDOW_HEIGHT { 600 };
 auto WINDOW_NAME            { "01_Window" };
 
-static void log(const char* message){
+static void Log(const char* message){
     std::cout << message << std::endl;
 }
 
@@ -36,7 +36,7 @@ int main(){
     };
 
     if (window == nullptr) {
-        log("Failed to create GLFW window. Bailing out!");
+        Log("Failed to create GLFW window. Bailing out!");
         glfwTerminate();
         return -1;
     }
@@ -46,7 +46,7 @@ int main(){
     glfwSwapInterval(1);
 
     if(!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))){
-        log("Failed to initialize glad. Bailing out!");
+        Log("Failed to initialize glad. Bailing out!");
         return -1;
     };
 

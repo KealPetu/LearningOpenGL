@@ -1,9 +1,8 @@
 #include "WindowManager.hpp"
-#include <cstdlib>
 
-GLFWwindow *window{};
+GLFWwindow *window {};
 
-static void log(const char *message) {
+static void Log(const char *message) {
     std::cout << message << std::endl;
 }
 
@@ -31,7 +30,7 @@ void initializeWindow(const int width, const int height, const char *name) {
     );
 
     if (window == nullptr) {
-        log("Failed to create GLFW window. Bailing out!");
+        Log("Failed to create GLFW window. Bailing out!");
         glfwTerminate();
         std::exit(EXIT_FAILURE);
     }
@@ -41,7 +40,7 @@ void initializeWindow(const int width, const int height, const char *name) {
     glfwSwapInterval(1);
 
     if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
-        log("Failed to initialize glad. Bailing out!");
+        Log("Failed to initialize glad. Bailing out!");
         glfwTerminate();
         std::exit(EXIT_FAILURE);
     };
