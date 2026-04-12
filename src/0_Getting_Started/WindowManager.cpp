@@ -1,13 +1,13 @@
-#include "Window.hpp"
+#include "WindowManager.hpp"
 #include <cstdlib>
 
-GLFWwindow* window {};
+GLFWwindow *window{};
 
-static void log(const char* message) {
+static void log(const char *message) {
     std::cout << message << std::endl;
 }
 
-void framebuffer_size_callback(GLFWwindow* window, const int WIDTH, const int HEIGHT) {
+void framebuffer_size_callback(GLFWwindow *window, const int WIDTH, const int HEIGHT) {
     glViewport(0, 0, WIDTH, HEIGHT);
 }
 
@@ -21,14 +21,14 @@ void initializeGLFW(const int versionMajor, const int versionMinor) {
 #endif
 }
 
-void initializeWindow(const int width, const int height, const char* name) {
+void initializeWindow(const int width, const int height, const char *name) {
     window = glfwCreateWindow(
-            width,
-            height,
-            name,
-            nullptr,
-            nullptr
-        );
+        width,
+        height,
+        name,
+        nullptr,
+        nullptr
+    );
 
     if (window == nullptr) {
         log("Failed to create GLFW window. Bailing out!");
@@ -42,7 +42,7 @@ void initializeWindow(const int width, const int height, const char* name) {
 
     if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
         log("Failed to initialize glad. Bailing out!");
-		glfwTerminate();
+        glfwTerminate();
         std::exit(EXIT_FAILURE);
     };
 

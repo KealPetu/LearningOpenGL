@@ -1,4 +1,4 @@
-#include "Window.hpp"
+#include "WindowManager.hpp"
 
 int main(){
 	initializeGLFW(3, 3);
