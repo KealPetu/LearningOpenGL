@@ -1,4 +1,5 @@
 #include "Window.hpp"
+#include <cstdlib>
 
 GLFWwindow* window {};
 
@@ -32,6 +33,7 @@ void initializeWindow(const int width, const int height, const char* name) {
     if (window == nullptr) {
         log("Failed to create GLFW window. Bailing out!");
         glfwTerminate();
+        std::exit(EXIT_FAILURE);
     }
 
     glfwMakeContextCurrent(window);
@@ -41,6 +43,7 @@ void initializeWindow(const int width, const int height, const char* name) {
     if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
         log("Failed to initialize glad. Bailing out!");
 		glfwTerminate();
+        std::exit(EXIT_FAILURE);
     };
 
     glViewport(0, 0, width, height);
