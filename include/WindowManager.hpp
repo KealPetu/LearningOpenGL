@@ -1,18 +1,26 @@
+#pragma once
+
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
-
 #include <iostream>
-#include <cstdlib>
 #include <string>
 
-void initializeWindow(const int width, const int height, const char* name);
+class WindowManager {
+private:
+    GLFWwindow *window;
 
-void framebuffer_size_callback(GLFWwindow* window, const int WIDTH, const int HEIGHT);
+    static void Log(const char* message);
+    static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
-void destroyWindow();
+public:
+    WindowManager();
+    ~WindowManager();
 
-void endDrawing();
+    void initializeGLFW(int versionMajor, int versionMinor);
+    void initializeWindow(int width, int height, const char *name);
+    void endDrawing();
+    void destroyWindow();
+    bool windowShouldClose() const;
 
-bool windowShouldClose();
-
-void initializeGLFW(const int versionMajor, const int versionMinor);
+    GLFWwindow* getWindow() const;
+};

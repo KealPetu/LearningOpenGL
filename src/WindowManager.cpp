@@ -1,17 +1,28 @@
 #include "WindowManager.hpp"
 
-GLFWwindow *window {};
+WindowManager::WindowManager() : window(nullptr) {}
 
-static void Log(const char *message) {
+WindowManager::~WindowManager() {
+    if (window) {
+        destroyWindow();
+    }
+}
+
+void WindowManager::Log(const char *message){
     std::cout << message << std::endl;
 }
 
-void framebuffer_size_callback(GLFWwindow *window, const int WIDTH, const int HEIGHT) {
+void WindowManager::framebuffer_size_callback(GLFWwindow *window, const int WIDTH, const int HEIGHT) {
     glViewport(0, 0, WIDTH, HEIGHT);
 }
 
-void initializeGLFW(const int versionMajor, const int versionMinor) {
-    glfwInit();
+void WindowManager::initializeGLFW(const int versionMajor, const int versionMinor) {
+
+    if (!glfwInit()) {
+        Log("Failed to initialize GLFW. Bailing out!");
+        glfwTerminate();
+        std::exit(EXIT_FAILURE);
+    }
 
     const std::string initMessage = "GLFW initialized - OpenGL version: " +
                               std::to_string(versionMajor) + "." +
@@ -26,7 +37,7 @@ void initializeGLFW(const int versionMajor, const int versionMinor) {
 #endif
 }
 
-void initializeWindow(const int width, const int height, const char *name) {
+void WindowManager::initializeWindow(int width, int height, const char* name) {
     window = glfwCreateWindow(
         width,
         height,
@@ -35,7 +46,7 @@ void initializeWindow(const int width, const int height, const char *name) {
         nullptr
     );
 
-    if (window == nullptr) {
+    if (!window) {
         Log("Failed to create GLFW window. Bailing out!");
         glfwTerminate();
         std::exit(EXIT_FAILURE);
@@ -59,16 +70,20 @@ void initializeWindow(const int width, const int height, const char *name) {
     glViewport(0, 0, width, height);
 }
 
-void endDrawing() {
+void WindowManager::endDrawing() {
     glfwSwapBuffers(window);
     glfwPollEvents();
 }
 
-void destroyWindow() {
+void WindowManager::destroyWindow() {
     glfwDestroyWindow(window);
     Log("Window closed successfully");
 }
 
-bool windowShouldClose() {
+bool WindowManager::windowShouldClose() const{
     return glfwWindowShouldClose(window);
+}
+
+GLFWwindow* WindowManager::getWindow() const {
+    return window;
 }

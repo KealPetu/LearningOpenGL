@@ -1,25 +1,26 @@
 #include "WindowManager.hpp"
 
 constexpr int WINDOW_WIDTH	{ 800 };
-constexpr int WINDOW_HEIGHT	{ 600 };
+constexpr int WINDOW_HEIGHT	{ 450 };
 
-GLfloat backgroundColor[4] { 245.f / 255.f, 245.f / 255.f, 245.f / 255.f, 1.f };
+GLfloat backgroundColor[4] { 20.4f / 255.f, 20.4f / 255.f, 25.5f / 255.f, 1.f };
 
 int main(){
-	initializeGLFW(3, 3);
-	initializeWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "EBO");
+	WindowManager windowManager;
+	windowManager.initializeGLFW(3, 3);
+	windowManager.initializeWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "EBO");
 
 	//Shader Program creation
 
 	//Vertex Shader
-	const char* vertexShaderSource { R"(
+	static constexpr const char* vertexShaderSource { R"glsl(
 		#version 330 core
 		layout (location = 0) in vec3 aPos;
 		void main()
 		{
 		   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
 		}
-	)"};
+	)glsl"};
 
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
 
@@ -38,14 +39,14 @@ int main(){
 	}
 
 	//Fragment Shader
-	const char* fragmentShaderSource{ R"(
+	static constexpr const char* fragmentShaderSource{ R"glsl(
 		#version 330 core
 		out vec4 FragColor;
 		void main()
 		{
-		   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+		   FragColor = vec4(0.2f, 0.6f, 1.0f, 1.0f);
 		}
-	)" };
+	)glsl" };
 
 	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -120,7 +121,7 @@ int main(){
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL);
 
-	while (!windowShouldClose()) {
+	while (!windowManager.windowShouldClose()) {
 		glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]);
 		glClear(GL_COLOR_BUFFER_BIT);
 
@@ -130,7 +131,7 @@ int main(){
 		//glDrawArrays(GL_TRIANGLES, 0, 3);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
-		endDrawing();
+		windowManager.endDrawing();
 	}
 
 	glDeleteBuffers(1, &VAO);
@@ -138,7 +139,7 @@ int main(){
 	glDeleteBuffers(1, &EBO);
 	glDeleteProgram(shaderProgram);
 
-	destroyWindow();
+	windowManager.destroyWindow();
 	glfwTerminate();
 	return 0;
 }
