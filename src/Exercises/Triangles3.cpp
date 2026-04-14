@@ -69,15 +69,15 @@ int main(){
 	}
 
 	//Shader Program
-	const GLuint shaderProgram1 { glCreateProgram() };
+	const GLuint shaderProgram { glCreateProgram() };
 
-	glAttachShader(shaderProgram1, vertexShader);
-	glAttachShader(shaderProgram1, fragmentShader);
-	glLinkProgram(shaderProgram1);
-	glGetProgramiv(shaderProgram1, GL_LINK_STATUS, &success);
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+	glLinkProgram(shaderProgram);
+	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
 
 	if (!success) {
-		glGetProgramInfoLog(shaderProgram1, 512, nullptr, infoLog);
+		glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
 		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
 	}
 
@@ -131,14 +131,13 @@ int main(){
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL);
 
+	glBindVertexArray(VAO);
 	while (!windowManager.windowShouldClose()) {
 		glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]);
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		//Draw the triangle
-		glBindVertexArray(VAO);
-
-		glUseProgram(shaderProgram1);
+		glUseProgram(shaderProgram);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 		windowManager.endDrawing();
@@ -146,7 +145,7 @@ int main(){
 
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
-	glDeleteProgram(shaderProgram1);
+	glDeleteProgram(shaderProgram);
 
 	windowManager.destroyWindow();
 	glfwTerminate();
