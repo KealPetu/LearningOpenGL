@@ -21,6 +21,8 @@ void VAO::unbind() {
 }
 
 void VAO::linkAttrib(const VBO &VBO, const GLuint layout, const GLint numComponents, const GLenum type, const GLsizeiptr stride, const void *offset) {
+    VBO.bind();
     glVertexAttribPointer(layout, numComponents, type, GL_FALSE, stride, offset);
     glEnableVertexAttribArray(layout);
+    VBO.unbind();
 }

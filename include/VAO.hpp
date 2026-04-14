@@ -17,5 +17,5 @@ public:
     void bind() const;
     static void unbind();
 
-    static void linkAttrib(const VBO& VBO, GLuint layout, GLint numComponents, GLenum type, GLsizeiptr stride, const void* offset);
+    void linkAttrib(const VBO& VBO, GLuint layout, GLint numComponents, GLenum type, GLsizeiptr stride, const void* offset);
 };
