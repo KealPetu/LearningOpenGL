@@ -3,3 +3,4 @@
 add_subdirectory(01_Window)
 add_subdirectory(02_Triangle)
 add_subdirectory(03_Shaders)
+add_subdirectory(Exercises)
