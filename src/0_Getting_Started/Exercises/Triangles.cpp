@@ -118,7 +118,7 @@ int main() {
         windowManager.endDrawing();
     }
 
-	glDeleteBuffers(1, &VAO);
+	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
 	glDeleteProgram(shaderProgram);
 
