@@ -28,8 +28,8 @@ int main() {
     glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
     glCompileShader(vertexShader);
 
-    int success;
-    char infoLog[512];
+    int success {};
+    char infoLog[512] {};
 
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
 
@@ -91,8 +91,8 @@ int main() {
 	};
 
 	//VBO & VAO
-	GLuint VAOs[2];
-	GLuint VBOs[2];
+	GLuint VAOs[2] {};
+	GLuint VBOs[2] {};
 
 	glGenVertexArrays(2, VAOs);
 	glGenBuffers(2, VBOs);

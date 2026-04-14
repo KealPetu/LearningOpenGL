@@ -22,13 +22,13 @@ int main(){
 		}
 	)glsl"};
 
-	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	const GLuint vertexShader { glCreateShader(GL_VERTEX_SHADER) };
 
 	glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
 	glCompileShader(vertexShader);
 
-	int success;
-	char infoLog[512];
+	int success {};
+	char infoLog[512] {};
 
 	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
 
@@ -48,7 +48,7 @@ int main(){
 		}
 	)" };
 
-	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	const GLuint fragmentShader { glCreateShader(GL_FRAGMENT_SHADER) };
 
 	glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
 	glCompileShader(fragmentShader);
@@ -60,7 +60,7 @@ int main(){
 	}
 
 	//Shader Program
-	GLuint shaderProgram = glCreateProgram();
+	const GLuint shaderProgram { glCreateProgram() };
 
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
@@ -77,7 +77,7 @@ int main(){
 	glDeleteShader(fragmentShader);
 
 	//Vertices
-	GLfloat vertices[] = {
+	constexpr GLfloat vertices[] {
 		 0.0f,  0.5f, 0.0f, // top
 		 0.5f, -0.5f, 0.0f, // bottom right
 		-0.5f, -0.5f, 0.0f  // bottom left
