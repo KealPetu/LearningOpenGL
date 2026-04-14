@@ -15,10 +15,10 @@ int main(){
 	//Vertex Shader
 	static constexpr const char* vertexShaderSource { R"glsl(
 		#version 330 core
-		layout (location = 0) in vec3 aPos;
+		layout (location = 0) in vec2 aPos;
 		void main()
 		{
-		   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+		   gl_Position = vec4(aPos, 0.0, 1.0);
 		}
 	)glsl"};
 
@@ -78,9 +78,9 @@ int main(){
 
 	//Vertices
 	constexpr GLfloat vertices[] {
-		 0.0f,  0.5f, 0.0f, // top
-		 0.5f, -0.5f, 0.0f, // bottom right
-		-0.5f, -0.5f, 0.0f  // bottom left
+		 0.0f,  0.5f,	// top
+		 0.5f, -0.5f,	// bottom right
+		-0.5f, -0.5f	// bottom left
 	};
 
 	//Vertex Buffer Object (VBO) and Vertex Array Object (VAO)
@@ -94,7 +94,7 @@ int main(){
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), static_cast<void *>(nullptr));
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), static_cast<void *>(nullptr));
 	glEnableVertexAttribArray(0);
 
 	glBindBuffer(GL_ARRAY_BUFFER, NULL);
