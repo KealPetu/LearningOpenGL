@@ -37,7 +37,7 @@ void WindowManager::initializeGLFW(const int versionMajor, const int versionMino
 #endif
 }
 
-void WindowManager::initializeWindow(int width, int height, const char* name) {
+void WindowManager::initializeWindow(const int width, const int height, const char* name) {
     window = glfwCreateWindow(
         width,
         height,
@@ -70,12 +70,12 @@ void WindowManager::initializeWindow(int width, int height, const char* name) {
     glViewport(0, 0, width, height);
 }
 
-void WindowManager::endDrawing() {
+void WindowManager::endDrawing() const {
     glfwSwapBuffers(window);
     glfwPollEvents();
 }
 
-void WindowManager::destroyWindow() {
+void WindowManager::destroyWindow() const {
     glfwDestroyWindow(window);
     Log("Window closed successfully");
 }

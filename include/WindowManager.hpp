@@ -16,11 +16,11 @@ public:
     WindowManager();
     ~WindowManager();
 
-    void initializeGLFW(int versionMajor, int versionMinor);
+    static void initializeGLFW(int versionMajor, int versionMinor);
     void initializeWindow(int width, int height, const char *name);
-    void endDrawing();
-    void destroyWindow();
-    bool windowShouldClose() const;
+    void endDrawing() const;
+    void destroyWindow() const;
 
+    bool windowShouldClose() const;
     GLFWwindow* getWindow() const;
 };

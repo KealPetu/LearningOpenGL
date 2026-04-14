@@ -7,7 +7,7 @@ GLfloat backgroundColor[4] { 245.f / 255.f, 245.f / 255.f, 245.f / 255.f, 1.f };
 
 int main(){
 	WindowManager windowManager;
-	windowManager.initializeGLFW(3, 3);
+	WindowManager::initializeGLFW(3, 3);
 	windowManager.initializeWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Triangle");
 
 	//Shader Program creation
