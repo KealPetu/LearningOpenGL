@@ -3,7 +3,7 @@
 constexpr int WINDOW_WIDTH	{ 800 };
 constexpr int WINDOW_HEIGHT	{ 600 };
 
-GLfloat backgroundColor[4] { 245.f / 255.f, 245.f / 255.f, 245.f / 255.f, 1.f };
+GLfloat backgroundColor[4] { 20.4f / 255.f, 20.4f / 255.f, 25.5f / 255.f, 1.f };
 
 int main(){
 	WindowManager windowManager;
@@ -44,7 +44,7 @@ int main(){
 		out vec4 FragColor;
 		void main()
 		{
-		   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
+		   FragColor = vec4(0.2f, 0.6f, 0.8f, 1.0f);
 		}
 	)" };
 

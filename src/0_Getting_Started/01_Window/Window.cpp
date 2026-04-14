@@ -53,7 +53,7 @@ int main(){
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
     while(!glfwWindowShouldClose(window)){
-        glClearColor(245.f/255.f, 245.f/255.f, 245.f/255.f, 1.f);
+        glClearColor(20.4f/255.f, 20.4f/255.f, 25.5f/255.f, 1.f);
         glClear(GL_COLOR_BUFFER_BIT);
         glfwSwapBuffers(window);
         glfwPollEvents();
