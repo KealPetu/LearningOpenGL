@@ -11,27 +11,32 @@ GLfloat backgroundColor[4] { 20.4f / 255.f, 20.4f / 255.f, 25.5f / 255.f, 1.f };
 int main(){
 	WindowManager windowManager;
 	WindowManager::initializeGLFW(3, 3);
-	windowManager.initializeWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "EBO");
+	windowManager.initializeWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Triangles 3");
 
 	//Shader Program creation
 
 	//Vertex Shader
 	static constexpr const char* vertexShaderSource { R"glsl(
 		#version 330 core
-		layout (location = 0) in vec3 aPos;
+		layout (location = 0) in vec2 aPos;
+		layout (location = 1) in vec3 aColor;
+
+		out vec3 ourColor;
+
 		void main()
 		{
-		   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
+			gl_Position = vec4(aPos, 0.0, 1.0);
+			ourColor = aColor;
 		}
 	)glsl"};
 
-	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	const GLuint vertexShader { glCreateShader(GL_VERTEX_SHADER)};
 
 	glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
 	glCompileShader(vertexShader);
 
-	int success;
-	char infoLog[512];
+	int success {};
+	char infoLog[512] {};
 
 	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
 
@@ -42,16 +47,17 @@ int main(){
 	}
 
 	//Fragment Shader
-	static constexpr const char* fragmentShaderSource{ R"glsl(
+	static constexpr const char* fragmentShaderSource { R"glsl(
 		#version 330 core
+		in vec3 ourColor;
 		out vec4 FragColor;
 		void main()
 		{
-		   FragColor = vec4(0.2f, 0.6f, 1.0f, 1.0f);
+		   FragColor = vec4(ourColor, 1.0f);
 		}
 	)glsl" };
 
-	const GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+	const GLuint fragmentShader { glCreateShader(GL_FRAGMENT_SHADER) };
 
 	glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
 	glCompileShader(fragmentShader);
@@ -63,15 +69,15 @@ int main(){
 	}
 
 	//Shader Program
-	const GLuint shaderProgram = glCreateProgram();
+	const GLuint shaderProgram1 { glCreateProgram() };
 
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+	glAttachShader(shaderProgram1, vertexShader);
+	glAttachShader(shaderProgram1, fragmentShader);
+	glLinkProgram(shaderProgram1);
+	glGetProgramiv(shaderProgram1, GL_LINK_STATUS, &success);
 
 	if (!success) {
-		glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
+		glGetProgramInfoLog(shaderProgram1, 512, nullptr, infoLog);
 		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
 	}
 
@@ -80,24 +86,23 @@ int main(){
 	glDeleteShader(fragmentShader);
 
 	//Vertices
-	constexpr GLfloat vertices[] = {
-		//Triangle 1
-		-0.5f,  0.5f,
-		-0.25f, -0.5f,
-		-0.75f, -0.5f,
+	constexpr GLfloat vertices[] {
+		//Triangle 1	//rgb Colors
+		-0.5f,  0.5f,	0.2f, 0.6f, 0.8f,
+		-0.25f, -0.5f,	0.2f, 0.6f, 0.8f,
+		-0.75f, -0.5f,	0.2f, 0.6f, 0.8f,
 		//Triangle 2
-		0.5f,  0.5f,
-		0.75f, -0.5f,
-		0.25f, -0.5f
+		0.5f,  0.5f,	0.8, 0.4, 0.2,
+		0.75f, -0.5f,	0.8, 0.4, 0.2,
+		0.25f, -0.5f,	0.8, 0.4, 0.2
 	};
 
-	//Indexes
 	constexpr GLuint indexes[] {
 		0, 1, 2,
 		3, 4, 5
 	};
 
-	//Vertex Buffer Object (VBO), Vertex Array Object (VAO) and Element Buffer Objects (EBO)
+	//Vertex Buffer Object (VBO), Vertex Array Object (VAO)
 	GLuint VBO {};
 	GLuint VAO {};
 	GLuint EBO {};
@@ -114,17 +119,15 @@ int main(){
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indexes), indexes, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), static_cast<void *>(nullptr));
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), static_cast<void *>(nullptr));
 	glEnableVertexAttribArray(0);
+
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), reinterpret_cast<void *>(2 * sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, NULL);
 
-	// remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
-
 	glBindVertexArray(NULL);
-
-	// You can unbind the VAO afterward so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
-	// VAOs requires a call to glBindVertexArray anyway so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, NULL);
 
@@ -133,9 +136,9 @@ int main(){
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		//Draw the triangle
-		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
-		//glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glUseProgram(shaderProgram1);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 		windowManager.endDrawing();
@@ -143,8 +146,7 @@ int main(){
 
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
-	glDeleteBuffers(1, &EBO);
-	glDeleteProgram(shaderProgram);
+	glDeleteProgram(shaderProgram1);
 
 	windowManager.destroyWindow();
 	glfwTerminate();
