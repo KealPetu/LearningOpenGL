@@ -11,7 +11,7 @@ constexpr unsigned int WINDOW_HEIGHT	{ 450 };
 int main() {
     WindowManager windowManager;
     WindowManager::initializeGLFW(3, 3);
-    windowManager.initializeWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "OpenGL Window");
+    windowManager.initializeWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Triangles");
 
     //Vertex Shader
 	static constexpr const char* vertexShaderSource { R"glsl(
