@@ -9,13 +9,13 @@ class WindowManager {
 private:
     GLFWwindow *window;
 
-    static void Log(const char* message);
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 public:
     WindowManager();
     ~WindowManager();
 
+    static void Log(const char* message);
     static void initializeGLFW(int versionMajor, int versionMinor);
     void initializeWindow(int width, int height, const char *name);
     void endDrawing() const;
