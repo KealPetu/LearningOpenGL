@@ -2,11 +2,33 @@
 // Created by Keal on 4/13/2026.
 //
 
+#define _USE_MATH_DEFINES
+#include <vector>
+#include <cmath>
+
+#include "VAO.hpp"
+#include "VBO.hpp"
 #include "WindowManager.hpp"
 
 constexpr GLfloat BACKGROUND_COLOR[4]   { 20.4f / 255.f, 20.4f / 255.f, 25.5f / 255.f, 1.f };
 constexpr unsigned int WINDOW_WIDTH	    { 800 };
 constexpr unsigned int WINDOW_HEIGHT	{ 450 };
+
+std::vector<GLfloat> generatePolygonVertices(const int nSides, const float size) {
+	constexpr float MAX_SIZE {100};
+	std::vector<GLfloat> vertices;
+
+	const float angleIncrement { static_cast<float>(2.0f * M_PI / nSides) };
+	const float normalizedSize { size / MAX_SIZE };
+
+	for (int i = 0; i < nSides; ++i) {
+		const float angle = i * angleIncrement;
+		vertices.push_back(normalizedSize * cos(angle)); // x coordinate
+		vertices.push_back(normalizedSize * sin(angle)); // y coordinate
+	}
+
+	return vertices;
+}
 
 int main() {
     WindowManager windowManager;
@@ -87,9 +109,24 @@ int main() {
     float size {};
     std::cin >> size;
 
+	// Vertices
+	std::vector vertices {generatePolygonVertices(nSides, size)};
+
+	//VBO & VAO
+	const VBO vbo {vertices.data(), static_cast<GLsizeiptr>(sizeof(GLfloat) * vertices.size())};
+	VAO vao {};
+
+	vao.bind();
+	vao.linkAttrib(vbo, 0, 2, GL_FLOAT, 2 * sizeof(GLfloat), nullptr);
+	VAO::unbind();
+
     while (!windowManager.windowShouldClose()) {
         glClearColor(BACKGROUND_COLOR[0], BACKGROUND_COLOR[1], BACKGROUND_COLOR[2], BACKGROUND_COLOR[3]);
         glClear(GL_COLOR_BUFFER_BIT);
+
+    	glUseProgram(shaderProgram);
+    	vao.bind();
+    	glDrawArrays(GL_TRIANGLE_FAN, 0, nSides);
         windowManager.endDrawing();
     }
 
