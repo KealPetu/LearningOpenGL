@@ -5,6 +5,7 @@ WindowManager::WindowManager() : window(nullptr) {}
 WindowManager::~WindowManager() {
     if (window) {
         destroyWindow();
+    Log("Window closed successfully");
     }
 }
 
@@ -77,7 +78,6 @@ void WindowManager::endDrawing() const {
 
 void WindowManager::destroyWindow() const {
     glfwDestroyWindow(window);
-    Log("Window closed successfully");
 }
 
 bool WindowManager::windowShouldClose() const{
