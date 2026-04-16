@@ -6,22 +6,29 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/include")
-set(LIB_DIR "${CMAKE_SOURCE_DIR}/lib")
 
 find_package(OpenGL REQUIRED)
 
-if(WIN32)
-  set(GLFW_LIB "${LIB_DIR}/windows/glfw3.lib")
-  set(PLATFORM_LIBS opengl32)
-elseif(UNIX)
-  set(GLFW_LIB "${LIB_DIR}/linux/libglfw3.a")
-  set(PLATFORM_LIBS GL dl X11 Xrandr Xi Xxf86vm Xcursor pthread)
-else()
-  message(FATAL_ERROR "Unsupported platform for GLFW linking")
-endif()
+include(FetchContent)
 
-if(NOT EXISTS "${GLFW_LIB}")
-  message(FATAL_ERROR "Missing GLFW library: ${GLFW_LIB}")
+find_package(glfw3 3.4 QUIET)
+
+if(NOT glfw3_FOUND)
+  message(STATUS "GLFW not found. Downloading...")
+
+  set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+  set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+  set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+  set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+
+  FetchContent_Declare(
+          glfw
+          GIT_REPOSITORY https://github.com/glfw/glfw.git
+          GIT_TAG        3.4
+  )
+  FetchContent_MakeAvailable(glfw)
+else()
+  message(STATUS "GLFW found locally.")
 endif()
 
 #add_library(glad STATIC "${CMAKE_SOURCE_DIR}/src/glad.c")
