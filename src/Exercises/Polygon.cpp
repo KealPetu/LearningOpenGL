@@ -13,7 +13,7 @@
 
 constexpr GLfloat BACKGROUND_COLOR[4]   { 20.4f / 255.f, 20.4f / 255.f, 25.5f / 255.f, 1.f };
 constexpr unsigned int WINDOW_WIDTH	    { 800 };
-constexpr unsigned int WINDOW_HEIGHT	{ 450 };
+constexpr unsigned int WINDOW_HEIGHT	{ 800 };
 
 std::vector<GLfloat> generatePolygonVertices(const int nSides, const float size) {
 	constexpr float MAX_SIZE {100};
@@ -123,7 +123,8 @@ int main() {
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    std::cout << "|========== Polygon Playground! ==========|" << std::endl;
+    //Polygon Playground initialization
+	std::cout << "|========== Polygon Playground! ==========|" << std::endl;
     std::cout << "Enter the number of sides you want your polygon to have (starting from 3): ";
     int nSides {};
     std::cin >> nSides;
