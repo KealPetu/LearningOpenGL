@@ -18,7 +18,7 @@ public:
 
     void use() const;
 
-    void setBool(const std::string &name, GLboolean value) const;
-    void setInt(const std::string &name, GLint value) const;
-    void setFloat(const std::string &name, GLfloat value) const;
+    void setBool(const std::string &varName, GLboolean value) const;
+    void setInt(const std::string &varName, GLint value) const;
+    void setFloat(const std::string &varName, GLfloat value) const;
 };

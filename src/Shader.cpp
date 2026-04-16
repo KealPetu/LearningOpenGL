@@ -9,25 +9,20 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
     std::ifstream vShaderFile;
     std::ifstream fShaderFile;
 
-    // Asegurarnos de que los objetos ifstream puedan lanzar excepciones
     vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
     fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 
     try {
-        // Abrir los archivos
         vShaderFile.open(vertexPath);
         fShaderFile.open(fragmentPath);
         std::stringstream vShaderStream, fShaderStream;
 
-        // Leer el contenido de los archivos en los streams
         vShaderStream << vShaderFile.rdbuf();
         fShaderStream << fShaderFile.rdbuf();
 
-        // Cerrar los manejadores de archivos
         vShaderFile.close();
         fShaderFile.close();
 
-        // Convertir el stream a un string de C++
         vertexCode = vShaderStream.str();
         fragmentCode = fShaderStream.str();
     }
@@ -35,11 +30,9 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
         std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ: " << e.what() << std::endl;
     }
 
-    // Convertir el string de C++ a un string de C (const char*) para OpenGL
     const char* vShaderCode = vertexCode.c_str();
     const char* fShaderCode = fragmentCode.c_str();
 
-    // 2. Compilar los shaders
     GLuint vertex, fragment;
 
     // Vertex Shader
@@ -61,7 +54,6 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
     glLinkProgram(ID);
     checkCompileErrors(ID, "PROGRAM");
 
-    // Eliminar los shaders una vez enlazados (ya no son necesarios)
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 }
@@ -74,17 +66,17 @@ void Shader::use() const {
     glUseProgram(ID);
 }
 
-// --- Funciones de Utilidad para Uniforms ---
-void Shader::setBool(const std::string &name, const GLboolean value) const {
-    glUniform1i(glGetUniformLocation(ID, name.c_str()), static_cast<int>(value));
+// --- Utility functions for the Uniforms ---
+void Shader::setBool(const std::string &varName, const GLboolean value) const {
+    glUniform1i(glGetUniformLocation(ID, varName.c_str()), static_cast<int>(value));
 }
 
-void Shader::setInt(const std::string &name, const GLint value) const {
-    glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+void Shader::setInt(const std::string &varName, const GLint value) const {
+    glUniform1i(glGetUniformLocation(ID, varName.c_str()), value);
 }
 
-void Shader::setFloat(const std::string &name, const GLfloat value) const {
-    glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
+void Shader::setFloat(const std::string &varName, const GLfloat value) const {
+    glUniform1f(glGetUniformLocation(ID, varName.c_str()), value);
 }
 
 void Shader::checkCompileErrors(const GLuint shader, const std::string &type) const {
