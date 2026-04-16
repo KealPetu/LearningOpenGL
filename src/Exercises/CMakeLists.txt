@@ -21,3 +21,9 @@ set_target_properties(Polygon PROPERTIES OUTPUT_NAME "Polygon.x86_64")
 
 target_include_directories(Polygon PRIVATE "${INCLUDE_DIR}")
 target_link_libraries(Polygon PRIVATE glfw glad OpenGL::GL)
+
+add_executable(ReversedTriangle ReversedTriangle.cpp ../WindowManager.cpp ../VAO.cpp ../VBO.cpp ../EBO.cpp ../Shader.cpp)
+set_target_properties(ReversedTriangle PROPERTIES OUTPUT_NAME "ReversedTriangle.x86_64")
+
+target_include_directories(ReversedTriangle PRIVATE "${INCLUDE_DIR}")
+target_link_libraries(ReversedTriangle PRIVATE glfw glad OpenGL::GL)
