@@ -67,14 +67,14 @@ int main() {
 
         vao.bind();
         glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, nullptr);
-        VAO::unbind(); // Opcional, pero seguro
+        VAO::unbind(); // Optional, but safe
 
         // C. Buffer swap
         windowManager.endDrawing();
     }
 
     // 6. Clean
-    // NOTA: vao, vbo, ebo & shaderProgram clean by themselves (RAII).
+    // NOTE: vao, vbo, ebo & shaderProgram clean by themselves (RAII).
     windowManager.destroyWindow();
     glfwTerminate();
     
