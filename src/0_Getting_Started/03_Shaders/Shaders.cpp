@@ -11,7 +11,7 @@ constexpr unsigned int WINDOW_HEIGHT	{ 450 };
 int main() {
     WindowManager windowManager;
     WindowManager::initializeGLFW(3, 3);
-    windowManager.initializeWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Polygon");
+    windowManager.initializeWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Shaders");
     while (!windowManager.windowShouldClose()) {
         glClearColor(BACKGROUND_COLOR[0], BACKGROUND_COLOR[1], BACKGROUND_COLOR[2], BACKGROUND_COLOR[3]);
         glClear(GL_COLOR_BUFFER_BIT);

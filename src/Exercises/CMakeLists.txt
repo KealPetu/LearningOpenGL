@@ -1,23 +1,23 @@
-add_executable(Triangles_x86_64 Triangles.cpp ../WindowManager.cpp)
-set_target_properties(Triangles_x86_64 PROPERTIES OUTPUT_NAME "Triangles.x86_64")
+add_executable(Triangles Triangles.cpp ../WindowManager.cpp)
+set_target_properties(Triangles PROPERTIES OUTPUT_NAME "Triangles.x86_64")
 
-target_include_directories(Triangles_x86_64 PRIVATE "${INCLUDE_DIR}")
-target_link_libraries(Triangles_x86_64 PRIVATE glfw glad OpenGL::GL)
+target_include_directories(Triangles PRIVATE "${INCLUDE_DIR}")
+target_link_libraries(Triangles PRIVATE glfw glad OpenGL::GL)
 
-add_executable(Triangles2_x86_64 Triangles2.cpp ../WindowManager.cpp)
-set_target_properties(Triangles2_x86_64 PROPERTIES OUTPUT_NAME "Triangles2.x86_64")
+add_executable(Triangles2 Triangles2.cpp ../WindowManager.cpp)
+set_target_properties(Triangles2 PROPERTIES OUTPUT_NAME "Triangles2.x86_64")
 
-target_include_directories(Triangles2_x86_64 PRIVATE "${INCLUDE_DIR}")
-target_link_libraries(Triangles2_x86_64 PRIVATE glfw glad OpenGL::GL)
+target_include_directories(Triangles2 PRIVATE "${INCLUDE_DIR}")
+target_link_libraries(Triangles2 PRIVATE glfw glad OpenGL::GL)
 
-add_executable(Triangles3_x86_64 Triangles3.cpp ../WindowManager.cpp)
-set_target_properties(Triangles3_x86_64 PROPERTIES OUTPUT_NAME "Triangles3.x86_64")
+add_executable(Triangles3 Triangles3.cpp ../WindowManager.cpp)
+set_target_properties(Triangles3 PROPERTIES OUTPUT_NAME "Triangles3.x86_64")
 
-target_include_directories(Triangles3_x86_64 PRIVATE "${INCLUDE_DIR}")
-target_link_libraries(Triangles3_x86_64 PRIVATE glfw glad OpenGL::GL)
+target_include_directories(Triangles3 PRIVATE "${INCLUDE_DIR}")
+target_link_libraries(Triangles3 PRIVATE glfw glad OpenGL::GL)
 
-add_executable(Polygon_x86_64 Polygon.cpp ../WindowManager.cpp ../VAO.cpp ../VBO.cpp ../EBO.cpp)
-set_target_properties(Polygon_x86_64 PROPERTIES OUTPUT_NAME "Polygon.x86_64")
+add_executable(Polygon Polygon.cpp ../WindowManager.cpp ../VAO.cpp ../VBO.cpp ../EBO.cpp)
+set_target_properties(Polygon PROPERTIES OUTPUT_NAME "Polygon.x86_64")
 
-target_include_directories(Polygon_x86_64 PRIVATE "${INCLUDE_DIR}")
-target_link_libraries(Polygon_x86_64 PRIVATE glfw glad OpenGL::GL)
+target_include_directories(Polygon PRIVATE "${INCLUDE_DIR}")
+target_link_libraries(Polygon PRIVATE glfw glad OpenGL::GL)
