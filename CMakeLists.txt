@@ -31,8 +31,8 @@ else()
   message(STATUS "GLFW found locally.")
 endif()
 
-#add_library(glad STATIC "${CMAKE_SOURCE_DIR}/src/glad.c")
-#target_include_directories(glad PUBLIC "${INCLUDE_DIR}")
+add_library(glad STATIC "${CMAKE_SOURCE_DIR}/src/glad.c")
+target_include_directories(glad PUBLIC "${INCLUDE_DIR}")
 
 add_subdirectory("${CMAKE_SOURCE_DIR}/src/0_Getting_Started")
 add_subdirectory("${CMAKE_SOURCE_DIR}/src/Exercises")
