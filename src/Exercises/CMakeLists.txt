@@ -27,3 +27,10 @@ set_target_properties(ReversedTriangle PROPERTIES OUTPUT_NAME "ReversedTriangle.
 
 target_include_directories(ReversedTriangle PRIVATE "${INCLUDE_DIR}")
 target_link_libraries(ReversedTriangle PRIVATE glfw glad OpenGL::GL)
+
+add_executable(Offset Offset.cpp ../WindowManager.cpp ../VAO.cpp ../VBO.cpp ../EBO.cpp ../Shader.cpp)
+set_target_properties(Offset PROPERTIES OUTPUT_NAME "Offset.x86_64")
+
+target_include_directories(Offset PRIVATE "${INCLUDE_DIR}")
+target_link_libraries(Offset PRIVATE glfw glad OpenGL::GL)
+
