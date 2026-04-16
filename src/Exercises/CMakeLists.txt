@@ -34,3 +34,9 @@ set_target_properties(Offset PROPERTIES OUTPUT_NAME "Offset.x86_64")
 target_include_directories(Offset PRIVATE "${INCLUDE_DIR}")
 target_link_libraries(Offset PRIVATE glfw glad OpenGL::GL)
 
+add_executable(SameValues SameValues.cpp ../WindowManager.cpp ../VAO.cpp ../VBO.cpp ../EBO.cpp ../Shader.cpp)
+set_target_properties(SameValues PROPERTIES OUTPUT_NAME "SameValues.x86_64")
+
+target_include_directories(SameValues PRIVATE "${INCLUDE_DIR}")
+target_link_libraries(SameValues PRIVATE glfw glad OpenGL::GL)
+
