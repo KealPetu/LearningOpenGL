@@ -9,3 +9,4 @@ add_opengl_exercise(Offset              Offset.cpp              "${EXERCISE_RESO
 add_opengl_exercise(SameValues          SameValues.cpp          "${EXERCISE_RESOURCES}")
 add_opengl_exercise(GeometricPulse      GeometricPulse.cpp      "${EXERCISE_RESOURCES}")
 add_opengl_exercise(PhysicalCanvas      PhysicalCanvas.cpp      "${EXERCISE_RESOURCES}")
+add_opengl_exercise(Oscilation          Oscilation.cpp          "${EXERCISE_RESOURCES}")
