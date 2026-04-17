@@ -56,7 +56,7 @@ int main() {
     windowManager.initializeWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Mi Motor Grafico");
 
     // 2. SHADERS COMPILATION
-    Shader shaderProgram("resources/shaders/pulse.vert", "resources/shaders/pulse.frag");
+    Shader shaderProgram("resources/shaders/pulse.vert", "resources/shaders/canvas.frag");
 
     // 3. GEOMETRY DEFINITION
     int nSides {};
@@ -90,7 +90,7 @@ int main() {
 
         shaderProgram.use();
         
-        // Uniforms
+        // (Optional) Uniforms
         shaderProgram.setFloat("time", timeValue);
 
         vao.bind();
