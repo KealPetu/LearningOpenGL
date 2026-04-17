@@ -59,8 +59,11 @@ int main() {
     Shader shaderProgram("resources/shaders/pulse.vert", "resources/shaders/pulse.frag");
 
     // 3. GEOMETRY DEFINITION
-    std::vector<GLfloat>vertices    { generatePolygonVertices(5) };
-    std::vector<GLuint> indices     { generatePolygonIndices(5) };
+    int nSides {};
+    std::cout << "Enter the number of sides for the polygon: ";
+    std::cin >> nSides;
+    std::vector<GLfloat>vertices    { generatePolygonVertices(nSides) };
+    std::vector<GLuint> indices     { generatePolygonIndices(nSides) };
 
     // 4. BUFFERS CONFIGURATION
     const VBO vbo(vertices.data(), static_cast<GLsizeiptr>(sizeof(GLfloat) * vertices.size()));
