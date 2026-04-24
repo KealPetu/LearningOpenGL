@@ -92,6 +92,9 @@ int main() {
         
         // (Optional) Uniforms
         shaderProgram.setFloat("time", timeValue);
+    	const float widthF { static_cast<float>(windowManager.getWidth()) };
+    	const float heightF { static_cast<float>(windowManager.getHeight()) };
+    	shaderProgram.setVec2("resolution", widthF, heightF);
 
         vao.bind();
         glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, nullptr);

@@ -79,6 +79,22 @@ void Shader::setFloat(const std::string &varName, const GLfloat value) const {
     glUniform1f(glGetUniformLocation(ID, varName.c_str()), value);
 }
 
+void Shader::setVec2(const std::string &varName, const GLfloat x, const GLfloat y) const {
+    glUniform2f(glGetUniformLocation(ID, varName.c_str()), x, y);
+}
+
+void Shader::setVec3(const std::string &varName, const GLfloat x, const GLfloat y, const GLfloat z) const {
+    glUniform3f(glGetUniformLocation(ID, varName.c_str()), x, y, z);
+}
+
+void Shader::setVec4(const std::string &varName, const GLfloat x, const GLfloat y, const GLfloat z, const GLfloat w) const {
+    glUniform4f(glGetUniformLocation(ID, varName.c_str()), x, y, z, w);
+}
+
+void Shader::setColor(const std::string &varName, const GLfloat r, const GLfloat g, const GLfloat b) const {
+    glUniform3f(glGetUniformLocation(ID, varName.c_str()), r, g, b);
+}
+
 void Shader::checkCompileErrors(const GLuint shader, const std::string &type) const {
     int success;
     char infoLog[1024];

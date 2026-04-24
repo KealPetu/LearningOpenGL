@@ -13,8 +13,13 @@ void WindowManager::Log(const char *message){
     std::cout << message << std::endl;
 }
 
-void WindowManager::framebuffer_size_callback(GLFWwindow *window, const int WIDTH, const int HEIGHT) {
-    glViewport(0, 0, WIDTH, HEIGHT);
+void WindowManager::framebuffer_size_callback(GLFWwindow *window, const int width, const int height) {
+    glViewport(0, 0, width, height);
+    // Recovers our class from the window's user pointer and updates the width and height values.
+    if (WindowManager* instance { static_cast<WindowManager*>(glfwGetWindowUserPointer(window)) }) {
+        instance->mWidth = width;
+        instance->mHeight = height;
+    }
 }
 
 void WindowManager::initializeGLFW(const int versionMajor, const int versionMinor) {
@@ -39,9 +44,11 @@ void WindowManager::initializeGLFW(const int versionMajor, const int versionMino
 }
 
 void WindowManager::initializeWindow(const int width, const int height, const char* name) {
+    mWidth = width;
+    mHeight = height;
     window = glfwCreateWindow(
-        width,
-        height,
+        mWidth,
+        mHeight,
         name,
         nullptr,
         nullptr
@@ -58,6 +65,7 @@ void WindowManager::initializeWindow(const int width, const int height, const ch
                                 std::to_string(height) + ")";
     Log(windowMessage.c_str());
 
+    glfwSetWindowUserPointer(window, this); // Connects the window to this class' object.
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSwapInterval(1);
