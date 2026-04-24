@@ -62,12 +62,10 @@ function(add_opengl_exercise TARGET_NAME SOURCE_FILE RESOURCE_DIR)
             COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${RESOURCE_DIR}"
             "$<TARGET_FILE_DIR:${TARGET_NAME}>/resources"
-            COMMENT "Sincronizando directorio de recursos para ${TARGET_NAME}..."
+            COMMENT "Syncing resources directory for ${TARGET_NAME}..."
     )
   endif()
 endfunction()
-
-# --- FIN NUEVA ARQUITECTURA ---
 
 add_subdirectory("${CMAKE_SOURCE_DIR}/0_Getting_Started")
 add_subdirectory("${CMAKE_SOURCE_DIR}/Exercises")
