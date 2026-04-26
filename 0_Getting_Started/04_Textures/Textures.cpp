@@ -13,7 +13,7 @@
 
 
 // --- GLOBAL CONFIGURATION ---
-constexpr unsigned int WINDOW_WIDTH  { 800 };
+constexpr unsigned int WINDOW_WIDTH  { 600 };
 constexpr unsigned int WINDOW_HEIGHT { 600 };
 constexpr GLfloat BACKGROUND_COLOR[4] { 0.1f, 0.1f, 0.15f, 1.0f }; // Elegant dark gray
 
@@ -24,7 +24,7 @@ int main() {
     windowManager.initializeWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Textures");
 
     // 2. SHADERS COMPILATION
-    const Shader shaderProgram("./resources/shaders/shader.vert", "./resources/shaders/shader.frag");
+    const Shader shaderProgram("./resources/shaders/Textures/shader.vert", "./resources/shaders/Textures/shader.frag");
 
     // NEW: GENERATE TEXTURE
     GLuint texture {};
@@ -36,6 +36,7 @@ int main() {
     GLsizei textHeight {};
     int nChannels {};
 
+    stbi_set_flip_vertically_on_load(true); // Flip texture vertically to match OpenGL's coordinate system
     GLubyte* textData{
         stbi_load("./resources/textures/container.jpg", &textWidth, &textHeight,&nChannels,
             STBI_default)
@@ -86,7 +87,7 @@ int main() {
     // 5. CORE LOOP (Game Loop)
     while (!windowManager.windowShouldClose()) {
         // A. Logic / State Updates (Inputs, Physics, etc.)
-        //float timeValue = static_cast<float>(glfwGetTime());
+        const auto timeValue = static_cast<float>(glfwGetTime());
 
         // B. Rendering
         glClearColor(BACKGROUND_COLOR[0], BACKGROUND_COLOR[1], BACKGROUND_COLOR[2], BACKGROUND_COLOR[3]);
@@ -95,7 +96,7 @@ int main() {
         shaderProgram.use();
 
         // (Optional) Uniforms
-        // shaderProgram.setFloat("time", timeValue);
+        shaderProgram.setFloat("timeValue", timeValue);
 
         glBindTexture(GL_TEXTURE_2D, texture);
         vao.bind();
