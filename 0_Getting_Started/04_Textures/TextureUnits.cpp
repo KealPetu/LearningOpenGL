@@ -135,7 +135,7 @@ int main() {
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, containerTexture);
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, containerTexture);
+        glBindTexture(GL_TEXTURE_2D, happyFaceTexture);
         vao.bind();
         glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, nullptr);
         VAO::unbind(); // Optional, but safe
