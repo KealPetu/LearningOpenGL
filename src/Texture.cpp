@@ -20,8 +20,8 @@ Texture::Texture(const char* texturePath, const GLenum texType, const GLenum slo
 
     stbi_set_flip_vertically_on_load(true); // Flip texture vertically to match OpenGL's coordinate system
     int numChannels;
-    GLbyte* m_textureData { stbi_load(texturePath, &m_width, &m_height,&numChannels,
-        STBI_default)};
+    GLbyte* m_textureData { reinterpret_cast<GLbyte *>(stbi_load(texturePath, &m_width, &m_height,
+        &numChannels, STBI_default))};
 
     if (m_textureData) {
         glTexImage2D(m_type, 0, format, m_width, m_height, 0, format,
