@@ -1,0 +1,1 @@
+add_opengl_exercise(04_Textures Textures.cpp "./resources")
