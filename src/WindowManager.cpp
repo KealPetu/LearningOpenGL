@@ -5,7 +5,7 @@ WindowManager::WindowManager() : window(nullptr) {}
 WindowManager::~WindowManager() {
     if (window) {
         destroyWindow();
-    Log("Window closed successfully");
+        Log("Window closed successfully");
     }
 }
 

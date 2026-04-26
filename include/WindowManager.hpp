@@ -8,8 +8,8 @@
 class WindowManager {
 private:
     GLFWwindow *window;
-    int mWidth;
-    int mHeight;
+    int mWidth{};
+    int mHeight{};
 
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
