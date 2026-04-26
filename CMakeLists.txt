@@ -34,19 +34,21 @@ endif()
 add_library(glad STATIC "${CMAKE_SOURCE_DIR}/src/glad.c")
 target_include_directories(glad PUBLIC "${INCLUDE_DIR}")
 
+add_library(stb_image STATIC "${CMAKE_SOURCE_DIR}/src/stb_image.cpp")
+target_include_directories(stb_image PUBLIC "${INCLUDE_DIR}")
+
 add_library(CoreGL STATIC
         "${CMAKE_SOURCE_DIR}/src/WindowManager.cpp"
         "${CMAKE_SOURCE_DIR}/src/VAO.cpp"
         "${CMAKE_SOURCE_DIR}/src/VBO.cpp"
         "${CMAKE_SOURCE_DIR}/src/EBO.cpp"
         "${CMAKE_SOURCE_DIR}/src/Shader.cpp"
-        "${CMAKE_SOURCE_DIR}/src/stb_image.cpp"
 )
 
 # Al usar PUBLIC, cualquier ejecutable que enlace CoreGL heredará automáticamente
-# los includes, glad, glfw y OpenGL. No tendrás que especificarlos de nuevo.
+# los includes, glad, glfw, stb_image & OpenGL. No tendrás que especificarlos de nuevo.
 target_include_directories(CoreGL PUBLIC "${INCLUDE_DIR}")
-target_link_libraries(CoreGL PUBLIC glfw glad OpenGL::GL)
+target_link_libraries(CoreGL PUBLIC glfw glad stb_image OpenGL::GL)
 
 # 2. Crear una función para automatizar la creación de ejecutables y copia de recursos
 function(add_opengl_exercise TARGET_NAME SOURCE_FILE RESOURCE_DIR)
