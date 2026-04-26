@@ -1,1 +1,1 @@
-add_opengl_exercise(04_Textures Textures.cpp "./resources")
+add_opengl_exercise(04_Textures Textures.cpp "${CMAKE_SOURCE_DIR}/0_Getting_Started/04_Textures/resources")
