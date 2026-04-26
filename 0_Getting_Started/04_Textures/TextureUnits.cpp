@@ -2,9 +2,6 @@
 // Created by Keal on 4/25/2026.
 //
 
-//
-// Created by Keal on 4/25/2026.
-//
 #include <vector>
 #include <iostream>
 
