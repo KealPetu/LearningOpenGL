@@ -9,7 +9,7 @@
 
 class VAO {
 private:
-    GLuint ID{};
+    GLuint m_ID{};
 public:
     VAO();
     ~VAO();

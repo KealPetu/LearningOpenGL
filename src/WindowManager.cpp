@@ -1,9 +1,9 @@
 #include "WindowManager.hpp"
 
-WindowManager::WindowManager() : window(nullptr) {}
+WindowManager::WindowManager() : m_window(nullptr) {}
 
 WindowManager::~WindowManager() {
-    if (window) {
+    if (m_window) {
         destroyWindow();
         Log("Window closed successfully");
     }
@@ -17,8 +17,8 @@ void WindowManager::framebuffer_size_callback(GLFWwindow *window, const int widt
     glViewport(0, 0, width, height);
     // Recovers our class from the window's user pointer and updates the width and height values.
     if (WindowManager* instance { static_cast<WindowManager*>(glfwGetWindowUserPointer(window)) }) {
-        instance->mWidth = width;
-        instance->mHeight = height;
+        instance->m_width = width;
+        instance->m_height = height;
     }
 }
 
@@ -44,17 +44,17 @@ void WindowManager::initializeGLFW(const int versionMajor, const int versionMino
 }
 
 void WindowManager::initializeWindow(const int width, const int height, const char* name) {
-    mWidth = width;
-    mHeight = height;
-    window = glfwCreateWindow(
-        mWidth,
-        mHeight,
+    m_width = width;
+    m_height = height;
+    m_window = glfwCreateWindow(
+        m_width,
+        m_height,
         name,
         nullptr,
         nullptr
     );
 
-    if (!window) {
+    if (!m_window) {
         Log("Failed to create GLFW window. Bailing out!");
         glfwTerminate();
         std::exit(EXIT_FAILURE);
@@ -65,9 +65,9 @@ void WindowManager::initializeWindow(const int width, const int height, const ch
                                 std::to_string(height) + ")";
     Log(windowMessage.c_str());
 
-    glfwSetWindowUserPointer(window, this); // Connects the window to this class' object.
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetWindowUserPointer(m_window, this); // Connects the window to this class' object.
+    glfwMakeContextCurrent(m_window);
+    glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
     glfwSwapInterval(1);
 
     if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
@@ -80,18 +80,18 @@ void WindowManager::initializeWindow(const int width, const int height, const ch
 }
 
 void WindowManager::endDrawing() const {
-    glfwSwapBuffers(window);
+    glfwSwapBuffers(m_window);
     glfwPollEvents();
 }
 
 void WindowManager::destroyWindow() const {
-    glfwDestroyWindow(window);
+    glfwDestroyWindow(m_window);
 }
 
 bool WindowManager::windowShouldClose() const{
-    return glfwWindowShouldClose(window);
+    return glfwWindowShouldClose(m_window);
 }
 
 GLFWwindow* WindowManager::getWindow() const {
-    return window;
+    return m_window;
 }

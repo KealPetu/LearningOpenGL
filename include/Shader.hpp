@@ -8,7 +8,7 @@
 
 class Shader {
 private:
-    GLuint ID;
+    GLuint m_ID;
 
     void checkCompileErrors(GLuint shader, const std::string &type) const;
 

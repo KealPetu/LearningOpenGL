@@ -5,15 +5,15 @@
 #include "VAO.hpp"
 
 VAO::VAO() {
-    glGenVertexArrays(1, &ID);
+    glGenVertexArrays(1, &m_ID);
 }
 
 VAO::~VAO() {
-    glDeleteVertexArrays(1, &ID);
+    glDeleteVertexArrays(1, &m_ID);
 }
 
 void VAO::bind() const {
-    glBindVertexArray(ID);
+    glBindVertexArray(m_ID);
 }
 
 void VAO::unbind() {

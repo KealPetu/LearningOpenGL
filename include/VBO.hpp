@@ -8,7 +8,7 @@
 
 class VBO {
 private:
-    GLuint ID {};
+    GLuint m_ID {};
 public:
     VBO(const GLfloat* vertices, GLsizeiptr size);
     ~VBO();

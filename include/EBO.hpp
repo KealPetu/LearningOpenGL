@@ -8,7 +8,7 @@
 
 class EBO {
 private:
-    GLuint ID;
+    GLuint m_ID;
 public:
     EBO(const GLuint* indices, GLsizeiptr size);
     ~EBO();

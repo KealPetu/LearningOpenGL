@@ -7,9 +7,9 @@
 
 class WindowManager {
 private:
-    GLFWwindow *window;
-    int mWidth{};
-    int mHeight{};
+    GLFWwindow* m_window;
+    int m_width{};
+    int m_height{};
 
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -27,9 +27,9 @@ public:
     GLFWwindow* getWindow() const;
 
     int getWidth() const {
-        return mWidth;
+        return m_width;
     };
     int getHeight() const {
-        return mHeight;
+        return m_height;
     };
 };

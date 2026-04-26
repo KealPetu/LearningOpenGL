@@ -48,51 +48,51 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath) {
     checkCompileErrors(fragment, "FRAGMENT");
 
     // Shader Program
-    ID = glCreateProgram();
-    glAttachShader(ID, vertex);
-    glAttachShader(ID, fragment);
-    glLinkProgram(ID);
-    checkCompileErrors(ID, "PROGRAM");
+    m_ID = glCreateProgram();
+    glAttachShader(m_ID, vertex);
+    glAttachShader(m_ID, fragment);
+    glLinkProgram(m_ID);
+    checkCompileErrors(m_ID, "PROGRAM");
 
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 }
 
 Shader::~Shader() {
-    glDeleteProgram(ID);
+    glDeleteProgram(m_ID);
 }
 
 void Shader::use() const {
-    glUseProgram(ID);
+    glUseProgram(m_ID);
 }
 
 // --- Utility functions for the Uniforms ---
 void Shader::setBool(const std::string &varName, const GLboolean value) const {
-    glUniform1i(glGetUniformLocation(ID, varName.c_str()), static_cast<int>(value));
+    glUniform1i(glGetUniformLocation(m_ID, varName.c_str()), static_cast<int>(value));
 }
 
 void Shader::setInt(const std::string &varName, const GLint value) const {
-    glUniform1i(glGetUniformLocation(ID, varName.c_str()), value);
+    glUniform1i(glGetUniformLocation(m_ID, varName.c_str()), value);
 }
 
 void Shader::setFloat(const std::string &varName, const GLfloat value) const {
-    glUniform1f(glGetUniformLocation(ID, varName.c_str()), value);
+    glUniform1f(glGetUniformLocation(m_ID, varName.c_str()), value);
 }
 
 void Shader::setVec2(const std::string &varName, const GLfloat x, const GLfloat y) const {
-    glUniform2f(glGetUniformLocation(ID, varName.c_str()), x, y);
+    glUniform2f(glGetUniformLocation(m_ID, varName.c_str()), x, y);
 }
 
 void Shader::setVec3(const std::string &varName, const GLfloat x, const GLfloat y, const GLfloat z) const {
-    glUniform3f(glGetUniformLocation(ID, varName.c_str()), x, y, z);
+    glUniform3f(glGetUniformLocation(m_ID, varName.c_str()), x, y, z);
 }
 
 void Shader::setVec4(const std::string &varName, const GLfloat x, const GLfloat y, const GLfloat z, const GLfloat w) const {
-    glUniform4f(glGetUniformLocation(ID, varName.c_str()), x, y, z, w);
+    glUniform4f(glGetUniformLocation(m_ID, varName.c_str()), x, y, z, w);
 }
 
 void Shader::setColor(const std::string &varName, const GLfloat r, const GLfloat g, const GLfloat b) const {
-    glUniform3f(glGetUniformLocation(ID, varName.c_str()), r, g, b);
+    glUniform3f(glGetUniformLocation(m_ID, varName.c_str()), r, g, b);
 }
 
 void Shader::checkCompileErrors(const GLuint shader, const std::string &type) const {
