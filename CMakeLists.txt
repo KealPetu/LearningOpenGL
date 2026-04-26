@@ -43,6 +43,7 @@ add_library(CoreGL STATIC
         "${CMAKE_SOURCE_DIR}/src/VBO.cpp"
         "${CMAKE_SOURCE_DIR}/src/EBO.cpp"
         "${CMAKE_SOURCE_DIR}/src/Shader.cpp"
+        "${CMAKE_SOURCE_DIR}/src/Texture.cpp"
 )
 
 # Al usar PUBLIC, cualquier ejecutable que enlace CoreGL heredará automáticamente
