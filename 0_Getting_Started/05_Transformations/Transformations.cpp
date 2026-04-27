@@ -21,7 +21,7 @@ constexpr float BACKGROUND_COLOR[4] { 20.4f / 255.f, 20.4f / 255.f, 25.5f / 255.
 int main() {
     WindowManager::initializeGLFW(3, 3);
     WindowManager wm;
-    wm.initializeWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Scroll Exercise");
+    wm.initializeWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Transformations");
 
     const std::vector<GLfloat> VERTICES {
         0.5f,  0.5f, 1.0, 0.0, 0.0, 2.0f, 2.0f, // Upper right corner Red
