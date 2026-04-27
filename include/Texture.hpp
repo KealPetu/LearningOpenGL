@@ -12,10 +12,10 @@ private:
     GLuint m_ID {};
     GLsizei m_width {};
     GLsizei m_height {};
-    GLenum m_type {};
+    GLenum m_type {GL_TEXTURE_2D};
 
 public:
-    Texture(const char* texturePath, GLenum texType, GLenum slot, GLenum format, GLenum pixelType);
+    Texture(const char* texturePath, GLenum texType, GLenum unit);
     ~Texture();
 
     void bind(GLenum textureUnit) const;

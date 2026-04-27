@@ -51,8 +51,7 @@ int main() {
     VAO::unbind();
     EBO::unbind();
 
-    Texture containerTexture("./resources/textures/container.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB,
-        GL_UNSIGNED_BYTE);
+    Texture containerTexture("./resources/textures/container.jpg", GL_TEXTURE_2D, GL_TEXTURE0);
 
     const Shader SHADER("./resources/shaders/FilteringShader.vert","./resources/shaders/FilteringShader.frag");
     SHADER.use();

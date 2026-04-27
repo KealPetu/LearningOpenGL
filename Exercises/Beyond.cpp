@@ -51,10 +51,9 @@ int main() {
     VAO::unbind();
     EBO::unbind();
 
-    Texture containerTexture("./resources/textures/awesomeface.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA,
-        GL_UNSIGNED_BYTE);
-    containerTexture.setWrappingMode(GL_MIRRORED_REPEAT);
-    containerTexture.setFilteringMode(GL_NEAREST);
+    const Texture happyFace("./resources/textures/awesomeface.png", GL_TEXTURE_2D, GL_TEXTURE0);
+    happyFace.setWrappingMode(GL_MIRRORED_REPEAT);
+    happyFace.setFilteringMode(GL_NEAREST);
 
     const Shader SHADER("./resources/shaders/BeyondShader.vert","./resources/shaders/BeyondShader.frag");
     SHADER.use();

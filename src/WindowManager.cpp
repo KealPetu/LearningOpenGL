@@ -5,7 +5,6 @@ WindowManager::WindowManager() : m_window(nullptr) {}
 WindowManager::~WindowManager() {
     if (m_window) {
         destroyWindow();
-        Log("Window closed successfully");
     }
 }
 
@@ -61,9 +60,12 @@ void WindowManager::initializeWindow(const int width, const int height, const ch
         std::exit(EXIT_FAILURE);
     }
 
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+
     const std::string windowMessage = "Window created: \"" + std::string(name) +
-                                "\" (" + std::to_string(width) + "x" +
-                                std::to_string(height) + ")";
+                                "\" " + std::to_string(width) + "x" +
+                                std::to_string(height) + "@" + std::to_string(mode->refreshRate) + "Hz";
     Log(windowMessage.c_str());
 
     glfwSetWindowUserPointer(m_window, this); // Connects the window to this class' object.

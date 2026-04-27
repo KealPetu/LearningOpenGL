@@ -49,8 +49,7 @@ int main() {
     VAO::unbind();
     EBO::unbind();
 
-    Texture containerTexture("./resources/textures/container.jpg", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB,
-        GL_UNSIGNED_BYTE);
+    Texture containerTexture("./resources/textures/container.jpg", GL_TEXTURE_2D, GL_TEXTURE0);
 
     const Shader shader("./resources/shaders/ScrollShader.vert","./resources/shaders/ScrollShader.frag");
     shader.use();
