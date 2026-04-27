@@ -46,3 +46,13 @@ void Texture::bind(const GLenum textureUnit) const {
 void Texture::unbind() const {
     glBindTexture(m_type, 0);
 }
+
+void Texture::setWrappingMode(const GLint wrapMode) const {
+    glTexParameteri(m_type, GL_TEXTURE_WRAP_S, wrapMode);
+    glTexParameteri(m_type, GL_TEXTURE_WRAP_T, wrapMode);
+}
+
+void Texture::setFilteringMode(const GLint filterMode) const {
+    glTexParameteri(m_type, GL_TEXTURE_MIN_FILTER, filterMode);
+    glTexParameteri(m_type, GL_TEXTURE_MAG_FILTER, filterMode);
+}

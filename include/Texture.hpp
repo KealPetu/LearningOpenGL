@@ -20,4 +20,8 @@ public:
 
     void bind(GLenum textureUnit) const;
     void unbind() const;
+
+    void setWrappingMode(GLint wrapMode) const;
+
+    void setFilteringMode(GLint filterMode) const;
 };
