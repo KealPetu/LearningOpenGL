@@ -95,19 +95,23 @@ void Shader::setColor(const std::string &varName, const GLfloat r, const GLfloat
     glUniform3f(glGetUniformLocation(m_ID, varName.c_str()), r, g, b);
 }
 
+void Shader::setMat4(const std::string &varName, const glm::mat4 &mat) const {
+    glUniformMatrix4fv(glGetUniformLocation(m_ID, varName.c_str()), 1, GL_FALSE, glm::value_ptr(mat));
+}
+
 void Shader::checkCompileErrors(const GLuint shader, const std::string &type) const {
     int success;
     char infoLog[1024];
     if (type != "PROGRAM") {
         glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
         if (!success) {
-            glGetShaderInfoLog(shader, 1024, NULL, infoLog);
+            glGetShaderInfoLog(shader, 1024, nullptr, infoLog);
             std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
         }
     } else {
         glGetProgramiv(shader, GL_LINK_STATUS, &success);
         if (!success) {
-            glGetProgramInfoLog(shader, 1024, NULL, infoLog);
+            glGetProgramInfoLog(shader, 1024, nullptr, infoLog);
             std::cout << "ERROR::PROGRAM_LINKING_ERROR of type: " << type << "\n" << infoLog << "\n -- --------------------------------------------------- -- " << std::endl;
         }
     }
