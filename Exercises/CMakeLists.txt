@@ -12,3 +12,4 @@ add_opengl_exercise(PhysicalCanvas      PhysicalCanvas.cpp      "${EXERCISE_RESO
 add_opengl_exercise(Oscillation         Oscillation.cpp         "${EXERCISE_RESOURCES}")
 add_opengl_exercise(Corruption          Corruption.cpp          "${EXERCISE_RESOURCES}")
 add_opengl_exercise(ReversedFace        ReversedFace.cpp        "${EXERCISE_RESOURCES}")
+add_opengl_exercise(Scroll              Scroll.cpp              "${EXERCISE_RESOURCES}")
