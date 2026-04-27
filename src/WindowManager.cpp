@@ -30,10 +30,11 @@ void WindowManager::initializeGLFW(const int versionMajor, const int versionMino
         std::exit(EXIT_FAILURE);
     }
 
-    const std::string initMessage = "GLFW initialized - OpenGL version: " +
-                              std::to_string(versionMajor) + "." +
-                              std::to_string(versionMinor) + " Core Profile";
-    Log(initMessage.c_str());
+    int major, minor, revision;
+    glfwGetVersion(&major, &minor, &revision);
+    const std::string glfwVersionMessage = "GLFW " + std::to_string(major) + "." + std::to_string(minor) + "." +
+        std::to_string(revision) + " Initialized";
+    Log(glfwVersionMessage.c_str());
 
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, versionMajor);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, versionMinor);
@@ -60,7 +61,7 @@ void WindowManager::initializeWindow(const int width, const int height, const ch
         std::exit(EXIT_FAILURE);
     }
 
-    std::string windowMessage = "Window created: \"" + std::string(name) +
+    const std::string windowMessage = "Window created: \"" + std::string(name) +
                                 "\" (" + std::to_string(width) + "x" +
                                 std::to_string(height) + ")";
     Log(windowMessage.c_str());
@@ -76,7 +77,12 @@ void WindowManager::initializeWindow(const int width, const int height, const ch
         std::exit(EXIT_FAILURE);
     };
 
-    glViewport(0, 0, width, height);
+    const std::string glInfoMessage = "OpenGL version: " +
+                std::string(reinterpret_cast<const char*>(glGetString(GL_VERSION))) + " | GLSL " +
+                std::string(reinterpret_cast<const char*>(glGetString(GL_SHADING_LANGUAGE_VERSION)));
+    Log(glInfoMessage.c_str());
+
+    glViewport(0, 0, m_width, m_height);
 }
 
 void WindowManager::endDrawing() const {
