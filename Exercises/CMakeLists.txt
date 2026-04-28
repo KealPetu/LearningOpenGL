@@ -15,4 +15,4 @@ add_opengl_exercise(ReversedFace        ReversedFace.cpp        "${EXERCISE_RESO
 add_opengl_exercise(Scroll              Scroll.cpp              "${EXERCISE_RESOURCES}")
 add_opengl_exercise(Filtering           Filtering.cpp           "${EXERCISE_RESOURCES}")
 add_opengl_exercise(Beyond              Beyond.cpp              "${EXERCISE_RESOURCES}")
-add_opengl_exercise(GuiPlayground.cpp   GuiPlayground.cpp       "${EXERCISE_RESOURCES}")
+add_opengl_exercise(GuiPlayground       GuiPlayground.cpp       "${EXERCISE_RESOURCES}")

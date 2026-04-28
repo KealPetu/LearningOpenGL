@@ -28,10 +28,10 @@ int main() {
     wm.initializeWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "ImGui Control Panel");
 
     const std::vector<GLfloat> VERTICES {
-        -1.0f,  -1.0f,   1.0, 0.0, 0.0,  0.0f, 1.0f,
-        1.0f,   -1.0f,   0.0, 1.0, 0.0,  1.0f, 1.0f,
-        1.0f,   1.0f,  0.0, 0.0, 1.0,  1.0f, 0.0f,
-        -1.0f,  1.0f,  1.0, 1.0, 1.0,  0.0f, 0.0f
+        -.5f, -.5f, 1.0, 0.0, 0.0,  0.0f, 1.0f,
+        .5f, -.5f,  0.0, 1.0, 0.0,  1.0f, 1.0f,
+        .5f, .5f,   0.0, 0.0, 1.0,  1.0f, 0.0f,
+        -.5f, .5f,  1.0, 1.0, 1.0,  0.0f, 0.0f
    };
 
     constexpr int STRIDE { 7 * sizeof(GLfloat) };
@@ -78,13 +78,19 @@ int main() {
     // --- VARIABLES DE CONTROL (Las que modificará ImGui) ---
     glm::vec2 posicion(400.0f, 300.0f); // Empezamos en el centro de la pantalla
     float rotacion = 0.0f;
+    float velocidadRotacion = 0.0f;
     float escala = 100.0f; // Asumiendo que tu caja normalizada mida 1x1, esto la hace de 100x100 píxeles
 
     // ==========================================
     // BUCLE PRINCIPAL
     // ==========================================
+    GLfloat currentTime {0};
+    GLfloat lastTime {0};
+
     while (!wm.windowShouldClose()) {
         // --- 2. PREPARAR EL FRAME DE IMGUI ---
+        currentTime = glfwGetTime();
+        float deltaTime = currentTime - lastTime;
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
@@ -92,9 +98,10 @@ int main() {
         // --- 3. DISEÑAR LA INTERFAZ ---
         ImGui::Begin("Inspector 2D"); // Crea una ventana flotante
         ImGui::Text("Propiedades del Objeto:");
-        ImGui::SliderFloat2("Posicion (X, Y)", &posicion.x, 0.0f, static_cast<float>(wm.getWidth()));
-        ImGui::SliderFloat("Rotacion", &rotacion, -360.f, 360.f);
-        ImGui::SliderFloat("Escala", &escala, 1.0f, static_cast<float>(wm.getWidth())/2.f);
+        ImGui::SliderFloat2("Posicion (X, Y)", &posicion.x, 0.0f, static_cast<float>(wm.getWidth()), "%.0f");
+        ImGui::SliderFloat("Velocidad de Rotacion", &velocidadRotacion, -10.f * glm::pi<float>(), 10.f * glm::pi<float>(), "%.2f");
+        ImGui::SliderFloat("Escala", &escala, 1.0f, static_cast<float>(wm.getWidth()), "%.2f");
+        ImGui::TextDisabled("FPS: %.1f\ndelta: %.2f ms", 1.f/deltaTime, deltaTime * 1000);
         ImGui::End();
 
         // --- RENDERIZADO DE TU MOTOR (OpenGL) ---
@@ -111,7 +118,8 @@ int main() {
 
         glm::mat4 trans = glm::mat4(1.0f);
         trans = glm::translate(trans, glm::vec3(posicion.x, posicion.y, 0.0f));
-        trans = glm::rotate(trans, glm::radians(rotacion), glm::vec3(0.0f, 0.0f, 1.0f)); // Convertimos grados a radianes
+        rotacion += velocidadRotacion * deltaTime;
+        trans = glm::rotate(trans, rotacion, glm::vec3(0.0f, 0.0f, 1.0f)); // Convertimos grados a radianes
         trans = glm::scale(trans, glm::vec3(escala, escala, 1.0f));
 
         SHADER.setMat4("projection", projection);
@@ -127,6 +135,7 @@ int main() {
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         wm.endDrawing();
+        lastTime = currentTime;
     }
 
     // ==========================================
