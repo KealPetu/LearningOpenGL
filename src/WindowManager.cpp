@@ -71,7 +71,7 @@ void WindowManager::initializeWindow(const int width, const int height, const ch
     glfwSetWindowUserPointer(m_window, this); // Connects the window to this class' object.
     glfwMakeContextCurrent(m_window);
     glfwSetFramebufferSizeCallback(m_window, framebuffer_size_callback);
-    glfwSwapInterval(1);
+    toggleVsync(true);
 
     if (!gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress))) {
         Log("Failed to initialize glad. Bailing out!");
@@ -102,4 +102,9 @@ bool WindowManager::windowShouldClose() const{
 
 GLFWwindow* WindowManager::getWindow() const {
     return m_window;
+}
+
+void WindowManager::toggleVsync(bool vsyncEnabled)
+{
+    glfwSwapInterval(vsyncEnabled ? 1 : 0);
 }

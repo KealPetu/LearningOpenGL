@@ -10,7 +10,6 @@ private:
     GLFWwindow* m_window;
     int m_width{};
     int m_height{};
-
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 public:
@@ -25,6 +24,8 @@ public:
 
     bool windowShouldClose() const;
     GLFWwindow* getWindow() const;
+
+    void toggleVsync(bool vsyncEnabled);
 
     int getWidth() const {
         return m_width;

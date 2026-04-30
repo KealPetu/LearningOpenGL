@@ -79,8 +79,9 @@ int main() {
     glm::vec2 posicion(400.0f, 300.0f); // Empezamos en el centro de la pantalla
     float rotacion = 0.0f;
     float velocidadRotacion = 0.0f;
-    float escala = 100.0f; // Asumiendo que tu caja normalizada mida 1x1, esto la hace de 100x100 píxeles
-
+    glm::vec2 escala (512.f, 512.f); // Asumiendo que tu caja normalizada mida 1x1, esto la hace de 100x100 píxeles
+    bool vsyncEnabled = true;
+    bool wireframeModeEnabled = false;
     // ==========================================
     // BUCLE PRINCIPAL
     // ==========================================
@@ -89,6 +90,7 @@ int main() {
 
     while (!wm.windowShouldClose()) {
         // --- 2. PREPARAR EL FRAME DE IMGUI ---
+        wm.toggleVsync(vsyncEnabled);
         currentTime = glfwGetTime();
         float deltaTime = currentTime - lastTime;
         ImGui_ImplOpenGL3_NewFrame();
@@ -99,9 +101,12 @@ int main() {
         ImGui::Begin("Inspector 2D"); // Crea una ventana flotante
         ImGui::Text("Propiedades del Objeto:");
         ImGui::SliderFloat2("Posicion (X, Y)", &posicion.x, 0.0f, static_cast<float>(wm.getWidth()), "%.0f");
-        ImGui::SliderFloat("Velocidad de Rotacion", &velocidadRotacion, -10.f * glm::pi<float>(), 10.f * glm::pi<float>(), "%.2f");
-        ImGui::SliderFloat("Escala", &escala, 1.0f, static_cast<float>(wm.getWidth()), "%.2f");
-        ImGui::TextDisabled("FPS: %.1f\ndelta: %.2f ms", 1.f/deltaTime, deltaTime * 1000);
+        ImGui::SliderFloat("Rotacion", &rotacion, -360.f, 360.f, "%.2f");
+        ImGui::SliderFloat("Velocidad de Rotacion", &velocidadRotacion, -360.f, 360.f, "%.2f");
+        ImGui::SliderFloat2("Escala (X, Y)", &escala.x, 1.0f, static_cast<float>(wm.getWidth()), "%.2f");
+        ImGui::Checkbox("Vsync", &vsyncEnabled);
+        ImGui::Checkbox("Wireframe Mode", &wireframeModeEnabled);
+        ImGui::TextDisabled("FPS: %.1f\nframe time: %.2f\nRotacion: %.2f rads", 1.f/deltaTime, deltaTime * 1000, rotacion);
         ImGui::End();
 
         // --- RENDERIZADO DE TU MOTOR (OpenGL) ---
@@ -119,12 +124,13 @@ int main() {
         glm::mat4 trans = glm::mat4(1.0f);
         trans = glm::translate(trans, glm::vec3(posicion.x, posicion.y, 0.0f));
         rotacion += velocidadRotacion * deltaTime;
-        trans = glm::rotate(trans, rotacion, glm::vec3(0.0f, 0.0f, 1.0f)); // Convertimos grados a radianes
-        trans = glm::scale(trans, glm::vec3(escala, escala, 1.0f));
+        trans = glm::rotate(trans, glm::radians(rotacion), glm::vec3(0.0f, 0.0f, 1.0f)); // Convertimos grados a radianes
+        trans = glm::scale(trans, glm::vec3(escala, 1.0f));
 
         SHADER.setMat4("projection", projection);
         SHADER.setMat4("transform", trans);
 
+        wireframeModeEnabled ? glPolygonMode(GL_FRONT_AND_BACK, GL_LINE) : glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
         // ... (Dibujar tu VAO con glDrawElements) ...
         VAO.bind();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
