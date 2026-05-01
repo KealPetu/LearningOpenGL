@@ -10,6 +10,11 @@ private:
     GLFWwindow* m_window;
     int m_width{};
     int m_height{};
+
+    float m_currentTime{};
+    float m_lastTime{};
+    float m_deltaTime{};
+
     static void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 public:
@@ -19,7 +24,8 @@ public:
     static void Log(const char* message);
     static void initializeGLFW(int versionMajor, int versionMinor);
     void initializeWindow(int width, int height, const char *name);
-    void endDrawing() const;
+    void beginDrawing();
+    void endDrawing();
     void destroyWindow() const;
 
     bool windowShouldClose() const;
@@ -33,4 +39,9 @@ public:
     int getHeight() const {
         return m_height;
     };
+
+    [[nodiscard]] float getDeltaTime() const
+    {
+        return m_deltaTime;
+    }
 };

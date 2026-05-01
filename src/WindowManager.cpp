@@ -87,9 +87,17 @@ void WindowManager::initializeWindow(const int width, const int height, const ch
     glViewport(0, 0, m_width, m_height);
 }
 
-void WindowManager::endDrawing() const {
+void WindowManager::beginDrawing()
+{
+    m_currentTime = static_cast<float>(glfwGetTime());
+    m_deltaTime = m_currentTime - m_lastTime;
+}
+
+void WindowManager::endDrawing()
+{
     glfwSwapBuffers(m_window);
     glfwPollEvents();
+    m_lastTime = m_currentTime;
 }
 
 void WindowManager::destroyWindow() const {
