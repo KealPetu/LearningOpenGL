@@ -1,0 +1,12 @@
+[submodule "GLFW"]
+	path = GLFW
+	url = https://github.com/glfw/glfw.git
+	branch = 3.4
+[submodule "glm"]
+	path = glm
+	url = https://gitlab.com/g-truc/glm.git
+	branch = 1.0.3
+[submodule "Dear ImGui"]
+	path = imgui
+	url = https://github.com/ocornut/imgui.git
+	branch = v1.92.8
